@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react'
+import './App.css'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 
 import Navbar from './scenes/global/Navbar'
