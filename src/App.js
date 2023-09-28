@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 
 import Navbar from './scenes/global/Navbar'
 import Home from './scenes/home/Home'
+import CartMenu from './scenes/global/CartMenu'
 
 const ScrollToTop = () => {
   const { pathname } = useLocation()
@@ -21,6 +22,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home/>}/>
         </Routes>
+        <CartMenu/>
       </BrowserRouter>
     </div>
   )

@@ -84,7 +84,7 @@ const CartMenu = () => {
                                     <Box
                                         display='flex'
                                         alignItems='center'
-                                        border={`1.5px solid ${shades.neutral[500]}`}
+                                        border={'1.5px solid #d6001c'}
                                     >
                                         <IconButton onClick={() => dispatch(decreaseCount({ id: item.id}))}>
                                             <RemoveIcon/>
@@ -112,7 +112,7 @@ const CartMenu = () => {
                     </FlexBox>
                     <Button
                         sx={{
-                            backgroundColor: shades.primary[400],
+                            backgroundColor: "#333333",
                             color: 'white',
                             borderRadius: 0,
                             minWidth: '100%',
