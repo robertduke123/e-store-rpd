@@ -18,8 +18,17 @@ const initialState = {
                 description: 'Keyboard with LEDs',
                 price: '$70.00'
             },
+            {   
+                id: 2,
+                image: 'https://m.media-amazon.com/images/I/51GWerTmfPL._AC_SX679_.jpg',
+                name: 'Spider-Man Mask',
+                description: 'Keyboard with LEDs',
+                price: '$60.00'
+            },
         ]
     }
+
+    
 
 export const cartSlice = createSlice({
     name: 'cart',
