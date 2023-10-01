@@ -5,14 +5,14 @@ const initialState = {
         cart: [],
         items: [
             {   
-                id: 1,
+                id: 0,
                 image: 'https://hnsfpau.imgix.net/5/images/detailed/165/18569AU.1.jpg?fit=fill&bg=0FFF&w=785&h=441&auto=format,compress',
                 name: 'Kettle',
                 description: 'Electric kettle.',
                 price: '$40.00'
             },
             {   
-                id: 2,
+                id: 1,
                 image: 'https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/peripherals/input-devices/dell/keyboards/aw420k/media-gallery/keyboard-aw420k-xkb-05-bk-gallery-01.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=1389&qlt=100,1&resMode=sharp2&size=1389,402&chrss=full',
                 name: 'Keyboard',
                 description: 'Keyboard with LEDs',
@@ -38,10 +38,15 @@ export const cartSlice = createSlice({
             state.items = action.payload
         },
         addToCart: (state, action) => {
-            state.cart = [...state.cart, action.payload.item]
+            if(state.cart.some(item => item.name === action.payload.item.name)) {
+                let index = state.cart.findIndex(e => e.name === action.payload.item.name)
+                state.cart[index].count = state.cart[index].count  + action.payload.item.count
+            } else {
+                state.cart = [...state.cart, action.payload.item]
+            }
         },
         removeFromCart : (state, action) => {
-            state.cart = state.cart.filter((item) => item.id !== action.payload.item.id)
+            state.cart = state.cart.filter((item) => item.id !== action.payload.id)
         },
         increaseCount : (state, action) => {
             state.cart = state.cart.map((item) => {

@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './scenes/global/Navbar'
 import Home from './scenes/home/Home'
 import CartMenu from './scenes/global/CartMenu'
+import ItemDetails from './scenes/itemDetails/ItemDetails'
+import Footer from './scenes/global/Footer'
 
 const ScrollToTop = () => {
   const { pathname } = useLocation()
@@ -22,8 +24,10 @@ const App = () => {
       <ScrollToTop/>
         <Routes>
           <Route path='/' element={<Home/>}/>
+          <Route path='/item/:itemId' element={<ItemDetails/>}/>
         </Routes>
         <CartMenu/>
+        <Footer/>
       </BrowserRouter>
     </div>
   )

@@ -10,7 +10,7 @@ const Item = ({item, width}) => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [count,setCount] = useState(1)
+    const [count, setCount] = useState(1)
     const [isHovered, setIsHovered] = useState(false)
 
     const { id, category, price, name, image } = item
@@ -68,6 +68,7 @@ const Item = ({item, width}) => {
                 <Button
                     onClick={() => {
                         dispatch(addToCart({item: { ...item, count}}))
+                        setCount(1)
                     }}
                     sx={{ backgroundColor: "#666666", color: 'white'}}
                 >Add to Cart

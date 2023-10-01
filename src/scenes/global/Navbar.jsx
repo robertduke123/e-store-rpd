@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Badge, Box, IconButton } from '@mui/material'
+import { TextField, Badge, Box, IconButton, Typography } from '@mui/material'
 import { PersonOutline, ShoppingBagOutlined, MenuOutlined, SearchOutlined } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { setIsCartOpen } from '../../state'
@@ -9,7 +9,26 @@ const Navbar = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const items = useSelector((state) => state.cart.items)
     const cart = useSelector((state) => state.cart.cart)
+    const [search, setSearch] = useState('hide')
+    const [searchItem, setSearchItem] = useState('')
+    const [filteredItems, setFilteredItems] = useState(items)
+
+    const handleInputChange = (e) => { 
+      const searchTerm = e.target.value;
+      setSearchItem(searchTerm)
+
+      const filterItems = items.filter((item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      setFilteredItems(filterItems);
+    }
+
+    console.log(filteredItems);
+
+    // document.addEventListener('click', () => setSearch('hide'))
 
   return (
     <Box
@@ -36,7 +55,7 @@ const Navbar = () => {
           sx={{'&:hover': {cursor: 'pointer'}}}
           color="#d6001c"
         >
-          Ecommer
+          Ecommerce
         </Box>
         <Box
           display='flex'
@@ -44,9 +63,29 @@ const Navbar = () => {
           columnGap='20px'
           zIndex='2'
         >
-          <IconButton sx={{color: 'black'}}>
+          {search === 'show' ?
+          <Box>
+            <TextField variant='standard' type='search' sx={{color: 'gray', width: '300px', paddingLeft: '5px'}} onChange={handleInputChange}/> 
+            <Box
+              sx={{
+                position: 'absolute',
+                width: '300px',
+                padding: '5px',
+                backgroundColor: 'red',
+                borderRadius: '0 0 5px 5px'
+              }}
+            >
+              {searchItem !== '' &&
+              filteredItems.map((item) => (
+                <Typography cursor='pointer'>{item.name}</Typography>
+              ))}
+            </Box> 
+          </Box>
+           :
+          <IconButton sx={{color: 'black'}} onClick={() => setSearch('show')}>               
             <SearchOutlined/>
           </IconButton>
+          }
           <IconButton sx={{color: 'black'}}>
             <PersonOutline/>
           </IconButton>

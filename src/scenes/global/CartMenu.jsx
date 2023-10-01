@@ -24,6 +24,8 @@ const CartMenu = () => {
     const totalPrice = cart.reduce((total, item) => {
         return total + item.count * item.price
     }, 0)
+
+    console.log(cart);
     
 
   return (
