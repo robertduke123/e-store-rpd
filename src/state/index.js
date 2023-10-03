@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+        users: [
+            {
+                email: 'r',
+                password: 'r'
+            }
+        ],
+        isSignedIn: false,
         isCartOpen: false,
         cart: [],
         items: [
@@ -8,6 +15,7 @@ const initialState = {
                 id: 0,
                 image: 'https://hnsfpau.imgix.net/5/images/detailed/165/18569AU.1.jpg?fit=fill&bg=0FFF&w=785&h=441&auto=format,compress',
                 name: 'Kettle',
+                category: 'newArrivals',
                 description: 'Electric kettle.',
                 price: '$40.00'
             },
@@ -15,6 +23,7 @@ const initialState = {
                 id: 1,
                 image: 'https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/peripherals/input-devices/dell/keyboards/aw420k/media-gallery/keyboard-aw420k-xkb-05-bk-gallery-01.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=1389&qlt=100,1&resMode=sharp2&size=1389,402&chrss=full',
                 name: 'Keyboard',
+                category: 'bestSellers',
                 description: 'Keyboard with LEDs',
                 price: '$70.00'
             },
@@ -22,10 +31,12 @@ const initialState = {
                 id: 2,
                 image: 'https://m.media-amazon.com/images/I/51GWerTmfPL._AC_SX679_.jpg',
                 name: 'Spider-Man Mask',
+                category: 'topRated',
                 description: 'Keyboard with LEDs',
                 price: '$60.00'
             },
-        ]
+        ],
+        
     }
 
     
@@ -34,6 +45,12 @@ export const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
+        onRegisterUser: (state, action) => {
+            state.users.push(action.payload)
+        },
+        setIsSignedIn: (state) => {
+            state.isSignedIn = true            
+        },
         setItems: (state, action) => {
             state.items = action.payload
         },
@@ -69,6 +86,8 @@ export const cartSlice = createSlice({
 })
 
 export const {
+    onRegisterUser,
+    setIsSignedIn,
     setItems,
     addToCart,
     removeFromCart,

@@ -7,6 +7,8 @@ import Home from './scenes/home/Home'
 import CartMenu from './scenes/global/CartMenu'
 import ItemDetails from './scenes/itemDetails/ItemDetails'
 import Footer from './scenes/global/Footer'
+import Signin from './scenes/user/Signin'
+import Register from './scenes/user/Register'
 
 const ScrollToTop = () => {
   const { pathname } = useLocation()
@@ -24,6 +26,8 @@ const App = () => {
       <ScrollToTop/>
         <Routes>
           <Route path='/' element={<Home/>}/>
+          <Route path='/signin' element={<Signin/>}/>
+          <Route path='/register' element={<Register/>}/>
           <Route path='/item/:itemId' element={<ItemDetails/>}/>
         </Routes>
         <CartMenu/>

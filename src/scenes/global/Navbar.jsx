@@ -9,6 +9,8 @@ const Navbar = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
+  
+    const isSignedIn = useSelector((state) => state.cart.isSignedIn)
     const items = useSelector((state) => state.cart.items)
     const cart = useSelector((state) => state.cart.cart)
     const [search, setSearch] = useState('hide')
@@ -67,17 +69,24 @@ const Navbar = () => {
           <Box>
             <TextField variant='standard' type='search' sx={{color: 'gray', width: '300px', paddingLeft: '5px'}} onChange={handleInputChange}/> 
             <Box
+              width='300px'
+              padding={searchItem !== '' && '5px'}
               sx={{
                 position: 'absolute',
-                width: '300px',
-                padding: '5px',
-                backgroundColor: 'red',
+                backgroundColor: '#f0f0f0',
                 borderRadius: '0 0 5px 5px'
               }}
             >
               {searchItem !== '' &&
               filteredItems.map((item) => (
-                <Typography cursor='pointer'>{item.name}</Typography>
+                <Typography 
+                  sx={{cursor: 'pointer'}} 
+                  onClick={() => {
+                    navigate(`/item/${item.id}`)
+                    setSearch('hide')
+                    setSearchItem('')
+                  }}
+                >{item.name}</Typography>
               ))}
             </Box> 
           </Box>
@@ -86,7 +95,16 @@ const Navbar = () => {
             <SearchOutlined/>
           </IconButton>
           }
-          <IconButton sx={{color: 'black'}}>
+          <IconButton 
+            sx={{color: 'black'}}
+            onClick={() => {
+              isSignedIn ? 
+              navigate('/register') :
+              navigate('/signin')
+              setSearch('hide')
+              setSearchItem('')
+            }}
+          >
             <PersonOutline/>
           </IconButton>
           <Badge 
@@ -104,7 +122,11 @@ const Navbar = () => {
             }}
             >
             <IconButton 
-            onClick={() => dispatch(setIsCartOpen({}))}
+            onClick={() => {
+              dispatch(setIsCartOpen({}))
+              setSearch('hide')
+              setSearchItem('')
+            }}
             sx={{color: 'black'}}>
               <ShoppingBagOutlined/>
             </IconButton>  

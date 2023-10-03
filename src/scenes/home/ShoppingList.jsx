@@ -29,15 +29,15 @@ const ShoppingList = () => {
     //     getItems()
     // }, [])
 
-    // let topRatedItems
-    // let newArrivalsItems
-    // let bestSellersItems
+    let topRatedItems
+    let newArrivalsItems
+    let bestSellersItems
 
-    // if(items) {
-    //     topRatedItems = items.filter((item) => item.attributes.category === 'topRated')
-    //     newArrivalsItems = items.filter((item) => item.attributes.category === 'newArrivals')
-    //     bestSellersItems = items.filter((item) => item.attributes.category === 'bestSellers')    
-    // }
+    if(items) {
+        topRatedItems = items.filter((item) => item.category === 'topRated')
+        newArrivalsItems = items.filter((item) => item.category === 'newArrivals')
+        bestSellersItems = items.filter((item) => item.category === 'bestSellers')    
+    }
     
 
   return (
@@ -74,7 +74,7 @@ const ShoppingList = () => {
                 items.map((item) => (
                     <Item item={item} key={`${item.name}-${item.id}`}/>
                 ))}
-            {/* {value === 'newArrivals' && items &&
+            {value === 'newArrivals' && items &&
                 newArrivalsItems.map((item) => (
                     <Item item={item} key={`${item.name}-${item.id}`}/>
                 ))}
@@ -85,7 +85,7 @@ const ShoppingList = () => {
             {value === 'topRated' && items &&
                 topRatedItems.map((item) => (
                     <Item item={item} key={`${item.name}-${item.id}`}/>
-                 ))} */}
+                 ))}
         </Box>
     </Box>
   )
