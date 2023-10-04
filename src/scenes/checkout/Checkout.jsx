@@ -34,59 +34,59 @@ const initialValues = {
     phoneNumber: ''
 }
 
-// const checkoutSchema = [
-//   yup.object().shape({
-//     billingAddress: yup.object().shape({
-//       firstName: yup.string().required('required'),
-//       lastName: yup.string().required('required'),
-//       country: yup.string().required('required'),
-//       street1: yup.string().required('required'),
-//       street2: yup.string(),
-//       city: yup.string().required('required'),
-//       state: yup.string().required('required'),
-//       zipCode: yup.string().required('required')
-//     }),
-//     shippingAddress: yup.object().shape({
-//     isSameAddress: yup.boolean(),
-//     firstName: yup.string().when('isSameAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     }),
-//     lastName: yup.string().when('isSameAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     }),
-//     country: yup.string().when('isSameAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     }),
-//     street1: yup.string().when('isSameAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     }),
-//     street2: yup.string().when('isSameAddress', {
-//       is: false,
-//       then: () => yup.string()
-//     }),
-//     city: yup.string().when('isSameAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     }),
-//     state: yup.string().when('isSameAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     }),
-//     zipCode: yup.string().when('isSameAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     })
-//   })
-//   }),
-//   yup.object().shape({
-//     email: yup.string().required('required'),
-//     phoneNumber: yup.string().required('required')
-//   })
-// ]
+const checkoutSchema = [
+  yup.object().shape({
+    billingAddress: yup.object().shape({
+      firstName: yup.string().required('required'),
+      lastName: yup.string().required('required'),
+      country: yup.string().required('required'),
+      street1: yup.string().required('required'),
+      street2: yup.string(),
+      city: yup.string().required('required'),
+      state: yup.string().required('required'),
+      zip: yup.string().required('required')
+    }),
+    shippingAddress: yup.object().shape({
+    isSameAddress: yup.boolean(),
+    firstName: yup.string().when('isSameAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    }),
+    lastName: yup.string().when('isSameAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    }),
+    country: yup.string().when('isSameAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    }),
+    street1: yup.string().when('isSameAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    }),
+    street2: yup.string().when('isSameAddress', {
+      is: false,
+      then: () => yup.string()
+    }),
+    city: yup.string().when('isSameAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    }),
+    state: yup.string().when('isSameAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    }),
+    zip: yup.string().when('isSameAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    })
+  })
+  }),
+  yup.object().shape({
+    email: yup.string().required('required'),
+    phoneNumber: yup.string().required('required')
+  })
+]
 
 const Checkout = () => {
 
@@ -96,31 +96,6 @@ const Checkout = () => {
   const isSignedIn = useSelector((state) => state.cart.isSignedIn)
   const isFirstStep = activeStep === 0
   const isSecondStep = activeStep === 1
-//   const [values, setValues] = useState({
-//     billingAddress: {
-//         firstName: '',
-//         lastName: '',
-//         country: '',
-//         street1: '',
-//         street2: '',
-//         city: '',
-//         state: '',
-//         zipCode: ''
-//     },
-//     shippingAddress: {
-//         isSameAddress: true,
-//         firstName: '',
-//         lastName: '',
-//         country: '',
-//         street1: '',
-//         street2: '',
-//         city: '',
-//         state: '',
-//         zipCode: ''
-//     },
-//     email: '',
-//     phoneNumber: ''
-//   })
 
   const onLoad = async() => {
     if(isSignedIn){
@@ -132,25 +107,35 @@ const Checkout = () => {
         initialValues.billingAddress.city = user.country
         initialValues.billingAddress.state = user.state
         initialValues.billingAddress.zipCode = user.zipCode
+        initialValues.shippingAddress.firstName = user.firstName
+        initialValues.shippingAddress.lastName = user.lastName
+        initialValues.shippingAddress.country = user.streetAddress1
+        initialValues.shippingAddress.street1 = user.streetAddress2
+        initialValues.shippingAddress.street2 = user.city
+        initialValues.shippingAddress.city = user.country
+        initialValues.shippingAddress.state = user.state
+        initialValues.shippingAddress.zipCode = user.zipCode
         initialValues.email = user.email
         initialValues.phoneNumber = user.phone
-    }}  
+
+        setActiveStep(1)
+    }
+  }  
 
     useEffect(() => {
         onLoad()
-        console.log(isSignedIn);
     }, [])
 
 
   const handleFormSubmit = async (values, actions) => {
     setActiveStep(activeStep + 1)
-
+    console.log('test');
     if(isFirstStep && values.shippingAddress.isSameAddress) {
       actions.setFieldValue('shippingAddress', {
         ...values.billingAddress,
         isSameAddress: true
       })
-      console.log(values);
+      // console.log(values);
     }
     //   if(isSecondStep) {
     //     makePayment(values)
@@ -175,7 +160,7 @@ const Checkout = () => {
         <Formik
           onSubmit={handleFormSubmit}
           initialValues={initialValues}
-        //   validationSchema={checkoutSchema[activeStep]}
+          validationSchema={checkoutSchema[activeStep]}
         >
           {({
             values,
@@ -186,7 +171,7 @@ const Checkout = () => {
             handleSubmit,
             setFieldValue
           }) => {
-            console.log(values);
+            // console.log(values);
             return(
             <form onSubmit={handleSubmit}>
               {isFirstStep && (
