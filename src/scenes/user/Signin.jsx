@@ -11,23 +11,27 @@ const initialValues = {
   password: ''
 }
 
+const signInSchema = yup.object().shape({
+    email: yup.string().required('required'),
+    password: yup.string().required('required')
+  })
+
+
 const Signin = () => {
 const navigate = useNavigate()
 const dispatch = useDispatch() 
 const users = useSelector((state) => state.cart.users)  
 
-const signInSchema = yup.object().shape({
-      email: yup.string().required('required'),
-      password: yup.string().required('required')  
-  })
+
 
 const handleSubmit = (values) => {
-    if(values.email !== '' && values.password !== '') {
-        if(users[0].email === values.email && users[0].password === values.password) {
-            dispatch(setIsSignedIn({}))          
-            navigate('/')
-        }        
-    }
+    // if(values.email !== '' && values.password !== '') {
+    //     if(users[0].email === values.email && users[0].password === values.password) {
+    //         dispatch(setIsSignedIn({}))          
+    //         navigate('/')
+    //     }        
+    // }
+    console.log('test!!!!');
 }
 
   return (
@@ -39,17 +43,18 @@ const handleSubmit = (values) => {
       >
         {({
           values,
-            errors,
-            touched,
-            handleBlur,
-            handleChange,
-            handleSubmit
+          errors,
+          touched,
+          handleBlur,
+          handleChange,
+          handleSubmit
         }) =>{ 
-          const formattedError = (field) => {
-            Boolean(
-              getIn(touched, field &&
-              getIn(errors, field))
-            )}
+          // console.log(signInSchema);
+
+          const formattedError = (field) =>  Boolean(getIn(touched, field)) &&  getIn(errors, field)
+
+          const formattedHelper = (field) => getIn(touched, field) && getIn(errors, field)
+          
 
         return(
           <form onSubmit={handleSubmit}>
@@ -62,32 +67,42 @@ const handleSubmit = (values) => {
             >
             <TextField
               fullWidth
-              type='text'
+              typeof='text'
               label='Email'
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.email}
               name='email'
               error={formattedError('email')}
+              helperText={formattedHelper('email')}
               sx={{gridColumn: 'span 2'}}
             />
 
             <TextField
               fullWidth
-              type='password'
+              typeof='password'
               label='Password'
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.password}
               name='password'
               error={formattedError('password')}
+              helperText={formattedHelper('password')}
               sx={{gridColumn: 'span 2'}}
             />
 
             <Button 
               variant='contained' 
               color='secondary' 
-              sx={{height: '50px', gridColumn: 'span 1'}}
+              sx={{
+                height: '50px', 
+                gridColumn: 'span 1',
+                backgroundColor: "#999999",
+                boxShadow: 'none',
+                color: 'white',
+                borderRadius: 0,
+                padding: '15px 40px'
+              }}
               onClick={() => navigate('/register')}
           >Register</Button>
 
@@ -95,7 +110,15 @@ const handleSubmit = (values) => {
               type='submit' 
               variant='contained' 
               color='primary' 
-              sx={{height: '50px', gridColumn: 'span 1'}}
+              sx={{
+                height: '50px', 
+                gridColumn: 'span 1',
+                backgroundColor: "#999999",
+                boxShadow: 'none',
+                color: 'white',
+                borderRadius: 0,
+                padding: '15px 40px'
+              }}
           >Sign In</Button>
           </Box>
           </form>
