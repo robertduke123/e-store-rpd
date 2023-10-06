@@ -26,7 +26,17 @@ const initialState = {
                 name: 'Kettle',
                 category: 'newArrivals',
                 description: 'Electric kettle.',
-                price: '$40.00'
+                price: '$40.00',
+                reviews: [
+                    {
+                        stars: [true, true, true, true, true],
+                        review: 'this is pretty good'
+                    },
+                    {
+                        stars: [true, true, false, false, false],
+                        review: 'this sucks'
+                    }
+                ]
             },
             {   
                 id: 1,
@@ -34,7 +44,17 @@ const initialState = {
                 name: 'Keyboard',
                 category: 'bestSellers',
                 description: 'Keyboard with LEDs',
-                price: '$70.00'
+                price: '$70.00',
+                reviews: [
+                    {
+                        stars: [true, true, true, true, true],
+                        review: 'this is pretty good'
+                    },
+                    {
+                        stars: [true, true, false, false, false],
+                        review: 'this sucks'
+                    }
+                ]
             },
             {   
                 id: 2,
@@ -42,7 +62,17 @@ const initialState = {
                 name: 'Spider-Man Mask',
                 category: 'topRated',
                 description: 'Keyboard with LEDs',
-                price: '$60.00'
+                price: '$60.00',
+                reviews: [
+                    {
+                        stars: [true, true, true, true, true],
+                        review: 'this is pretty good'
+                    },
+                    {
+                        stars: [true, true, false, false, false],
+                        review: 'this sucks'
+                    }
+                ]
             },
         ],
         
@@ -90,6 +120,11 @@ export const cartSlice = createSlice({
         },
         setIsCartOpen: (state) => {
             state.isCartOpen = !state.isCartOpen
+        },
+        addReview: (state, action) => {
+            state.items[action.payload.id].id === action.payload.id &&
+            console.log(state.items[action.payload.id].reviews);
+            state.items[action.payload.id].reviews.push(action.payload.review)
         }
      }
 })
@@ -102,7 +137,8 @@ export const {
     removeFromCart,
     increaseCount,
     decreaseCount,
-    setIsCartOpen
+    setIsCartOpen,
+    addReview
 } = cartSlice.actions
 
 export default cartSlice.reducer

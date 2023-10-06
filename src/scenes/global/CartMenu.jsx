@@ -60,7 +60,9 @@ const CartMenu = () => {
 
             {/* CART LIST */}
             <Box>
-                {cart.map((item) => (
+                {cart.length === 0 ? 
+                <Typography m='50px 60px'>Fill Up The Cart To Checkout</Typography> :
+                cart.map((item) => (
                     <Box key={`${item.name}-${item.id}`}>
                         <FlexBox p='15px 0'>
                             <Box flex='1 1 40%'>
@@ -124,8 +126,11 @@ const CartMenu = () => {
                             m: '20px 0'
                         }}
                         onClick={() => {
-                            navigate('/checkout');
+                            if(cart.length > 0) { 
+                                console.log('test');
+                            navigate('/checkout')
                             dispatch(setIsCartOpen({}))
+                            }
                         }}
                     >CHECKOUT</Button>
                 </Box>

@@ -7,6 +7,7 @@ import RemoveIcon from '@mui/icons-material/Remove'
 import { addToCart } from '../../state'
 import { useParams } from 'react-router-dom'
 import Item from '../../component/Item'
+import Review from './Review'
 
 const ItemDetails = () => {
 
@@ -131,7 +132,7 @@ const ItemDetails = () => {
          </Box>
          <Box display='flex' flexWrap='wrap' gap='15px'>
             {value === 'description' && <div>{item?.description}</div>}  
-            {value === 'reviews' && <div>reviews</div>}  
+            {value === 'reviews' && <Review id={item.id} reviews={item?.reviews}/>}  
          </Box>
 
          {/* RELATED ITEMS */}
