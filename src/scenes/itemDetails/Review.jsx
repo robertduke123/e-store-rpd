@@ -14,7 +14,7 @@ const Review = ({id, reviews, confirmReview}) => {
         two: false,
         three: false,
         four: false,
-        five: false,
+        five: false
     })
     
     const starReview = (number) => {
@@ -24,6 +24,7 @@ const Review = ({id, reviews, confirmReview}) => {
         number === 'four' && setReviewStars({one: true, two: true, three: true, four: true, five: false})
         number === 'five' && setReviewStars({one: true, two: true, three: true, four: true, five: true})        
     }    
+  Object.entries(reviewStars).forEach(entry => (entry.includes(true)))
 
   return (
     <Box width='100%' padding='20px 10px'>
@@ -36,7 +37,7 @@ const Review = ({id, reviews, confirmReview}) => {
         </div>
         
         <div style={{display: 'flex', padding: '0 150px 0 0'}}>
-            <TextField fullWidth onChange={(e) => setReview(e.target.value)}/>
+            <TextField fullWidth value={review} onChange={(e) => setReview(e.target.value)}/>
             <Button
                 variant='contained' 
                 color='primary' 
@@ -48,7 +49,12 @@ const Review = ({id, reviews, confirmReview}) => {
                     borderRadius: 0,
                     padding: '15px 40px'
                 }}
-                onClick={() => confirmReview(id, review, reviewStars)}
+                onClick={() => {
+                    if(review !== '') {
+                    confirmReview(id, review, reviewStars)
+                    setReview('')
+                    setReviewStars({one: false, two: false, three: false, four: false, five: false})
+                }}}
             >Confirm</Button>
         </div>    
         
