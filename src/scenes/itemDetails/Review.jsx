@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { addReview } from '../../state'
 import { current } from '@reduxjs/toolkit'
 
-const Review = ({id, reviews}) => {
+const Review = ({id, reviews, confirmReview}) => {
 
     const dispatch = useDispatch()
     const [review, setReview]  =useState('')
@@ -16,27 +16,14 @@ const Review = ({id, reviews}) => {
         four: false,
         five: false,
     })
-
-    const confirmReview = (id, review, reviewStars) => {
-        let stars= []
-        Object.entries(reviewStars).forEach(entry => stars.push(entry[1]))
-        dispatch(addReview({id: id, review: {stars, review}}))
-    }
-
-    const displayReview = () => {
-
-    }
-
-
+    
     const starReview = (number) => {
         number === 'one' && setReviewStars({one: true, two: false, three: false, four: false, five: false})
         number === 'two' && setReviewStars({one: true, two: true, three: false, four: false, five: false})
         number === 'three' && setReviewStars({one: true, two: true, three: true, four: false, five: false})
         number === 'four' && setReviewStars({one: true, two: true, three: true, four: true, five: false})
         number === 'five' && setReviewStars({one: true, two: true, three: true, four: true, five: true})        
-    }
-
-    
+    }    
 
   return (
     <Box width='100%' padding='20px 10px'>

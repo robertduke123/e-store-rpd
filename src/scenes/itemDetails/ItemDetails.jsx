@@ -4,7 +4,7 @@ import { IconButton, Box, Typography, Button, Tabs, Tab } from '@mui/material'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
-import { addToCart } from '../../state'
+import { addToCart, addReview } from '../../state'
 import { useParams } from 'react-router-dom'
 import Item from '../../component/Item'
 import Review from './Review'
@@ -50,7 +50,14 @@ const ItemDetails = () => {
 
     useEffect(() => {
       getItem()
-    }, [itemId]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [itemId, items]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    const confirmReview = (id, review, reviewStars) => {
+        let stars= []
+        Object.entries(reviewStars).forEach(entry => stars.push(entry[1]))
+        dispatch(addReview({id: id, review: {stars, review}}))
+        getItem()
+    }
 
   return (
     <Box width='80%' m='80px auto'>
@@ -132,7 +139,7 @@ const ItemDetails = () => {
          </Box>
          <Box display='flex' flexWrap='wrap' gap='15px'>
             {value === 'description' && <div>{item?.description}</div>}  
-            {value === 'reviews' && <Review id={item.id} reviews={item?.reviews}/>}  
+            {value === 'reviews' && <Review id={item.id} reviews={item?.reviews} confirmReview={confirmReview}/>}  
          </Box>
 
          {/* RELATED ITEMS */}
