@@ -25,7 +25,7 @@ const initialValues = {
         lastName: '',
         country: '',
         street1: '',
-        street2: '',
+        street2: '', 
         city: '',
         state: '',
         zip: ''
@@ -100,26 +100,26 @@ const Checkout = () => {
   const onLoad = async() => {
     if(isSignedIn){
         initialValues.billingAddress.firstName = user.firstName
-        initialValues.billingAddress.lastName = user.lastName
-        initialValues.billingAddress.country = user.streetAddress1
-        initialValues.billingAddress.street1 = user.streetAddress2
-        initialValues.billingAddress.street2 = user.city
-        initialValues.billingAddress.city = user.country
-        initialValues.billingAddress.state = user.state
-        initialValues.billingAddress.zipCode = user.zipCode
+        initialValues.billingAddress.lastName = user.lastName        
         initialValues.shippingAddress.firstName = user.firstName
         initialValues.shippingAddress.lastName = user.lastName
-        initialValues.shippingAddress.country = user.streetAddress1
-        initialValues.shippingAddress.street1 = user.streetAddress2
-        initialValues.shippingAddress.street2 = user.city
-        initialValues.shippingAddress.city = user.country
-        initialValues.shippingAddress.state = user.state
-        initialValues.shippingAddress.zipCode = user.zipCode
         initialValues.email = user.email
         initialValues.phoneNumber = user.phone
-
-        setActiveStep(1)
-    }
+        if(user.city !== '') { 
+          initialValues.billingAddress.country = user.streetAddress1
+          initialValues.billingAddress.street1 = user.streetAddress2
+          initialValues.billingAddress.street2 = user.city
+          initialValues.billingAddress.city = user.country
+          initialValues.billingAddress.state = user.state
+          initialValues.billingAddress.zipCode = user.zipCode
+          initialValues.shippingAddress.country = user.streetAddress1
+          initialValues.shippingAddress.street1 = user.streetAddress2
+          initialValues.shippingAddress.street2 = user.city
+          initialValues.shippingAddress.city = user.country
+          initialValues.shippingAddress.state = user.state
+          initialValues.shippingAddress.zipCode = user.zipCode
+          setActiveStep(1)
+        }}
   }  
 
     useEffect(() => {

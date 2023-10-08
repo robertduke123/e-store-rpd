@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
-import { Box, useMediaQuery, TextField, Button } from '@mui/material'
+import React from 'react'
+import { Box, TextField, Button, Checkbox, FormControlLabel } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Formik, getIn } from 'formik'
+import { Formik, getIn} from 'formik'
 import * as yup from 'yup'
 import { onRegisterUser, setIsSignedIn } from '../../state'
 
@@ -11,7 +11,8 @@ const initialValues = {
     firstName: '',
     lastName: '',
     email: '',
-    phone: '',
+    phone: '', 
+    skipAddress: false,
     streetAddress1: '',
     streetAddress2: '',
     city: '',
@@ -29,12 +30,31 @@ const registerSchema = yup.object().shape({
     lastName: yup.string().required('required'),
     email: yup.string().required('required'),
     phone: yup.string().required('required'),
-    streetAddress1: yup.string().required('required'),
-    streetAddress2: yup.string(),
-    city: yup.string().required('required'),
-    country: yup.string().required('required'),
-    state: yup.string().required('required'),
-    zip: yup.string().required('required'),
+    skipAddress: yup.boolean(),
+    streetAddress1: yup.string().when('skipAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    }),
+    streetAddress2: yup.string().when('skipAddress', {
+      is: false,
+      then: () => yup.string()
+    }),
+    city: yup.string().when('skipAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    }),
+    country: yup.string().when('skipAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    }),
+    state: yup.string().when('skipAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    }),
+    zip: yup.string().when('skipAddress', {
+      is: false,
+      then: () => yup.string().required('required')
+    }),
     password: yup.string().required('required')
   }),
   confirmPassword: yup.string().required('required')
@@ -44,32 +64,7 @@ const Register = () => {
 const users = useSelector((state) => state.cart.users)
 const navigate = useNavigate()
 const dispatch = useDispatch()
-// const [registerUser, setRegisterUser] = useState({
-//   firstName: '',
-//   lastName: '',
-//   email: '',
-//   phone: '',
-//   streetAddress1: '',
-//   city: '',
-//   country: '',
-//   state: '',
-//   zip: '',
-//   password: ''
-// })
-// const [streetAddress2, setStreetAddress2] = useState('')
-// const [confirmPassword, setConfirmPassword] = useState('')
 
-// const [errorFirst, setErrorFirst] = useState(false)
-// const [errorSecond, setErrorSecond] = useState(false)
-// const [errorEmail, setErrorEmail] = useState(false)
-// const [errorPhone, setErrorPhone] = useState(false)
-// const [errorStreet1, setErrorStreet1] = useState(false)
-// const [errorCity, setErrorCity] = useState(false)
-// const [errorCountry, setErrorCountry] = useState(false)
-// const [errorState, setErrorState] = useState(false)
-// const [errorZip, setErrorZip] = useState(false)
-// const [errorPassword, setErrorPassword] = useState(false)
-// const [errorConPassword, setErrorConPassword] = useState(false)
 
 const handleSubmit = (values) => {
 
@@ -94,7 +89,8 @@ const handleSubmit = (values) => {
           touched,
           handleBlur,
           handleChange,
-          handleSubmit
+          handleSubmit,
+          setFieldValue
         }) =>{ 
           console.log(values);
 
@@ -161,6 +157,45 @@ const handleSubmit = (values) => {
                 sx={{gridColumn: 'span 1'}}
               />
 
+              <TextField
+                fullWidth
+                type='password'
+                label='Password'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.registerUser.password}
+                name='registerUser.password'
+                error={formattedError('registerUser.password')}
+                helperText={formattedHelper('registerUser.password')}
+                sx={{gridColumn: 'span 2'}}
+              />
+
+              <TextField
+                fullWidth
+                type='password'
+                label='Confirm Password'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.confirmPassword}
+                name='confirmPassword'
+                error={formattedError('confirmPassword')}
+                helperText={formattedHelper('confirmPassword')}
+                sx={{gridColumn: 'span 2'}}
+              /> 
+
+              <Box mb='20px' sx={{gridColumn: 'span 2'}}>
+                <FormControlLabel
+                label='Skip Address Details'
+                control={
+                    <Checkbox
+                        checked={values.registerUser.skipAddress}
+                        onChange={() => setFieldValue('registerUser.skipAddress', !values.registerUser.skipAddress)}
+                    />
+                }
+                />
+              </Box> 
+              {!values.registerUser.skipAddress && (
+              <div style={{gridColumn: 'span 2', display: 'grid', gap:'15px', gridTemplateColumns:'repeat(2, minmax(0, 1fr))'}}> 
               <TextField
                 fullWidth
                 typeof='text'
@@ -237,33 +272,9 @@ const handleSubmit = (values) => {
                 error={formattedError('registerUser.zip')}
                 helperText={formattedHelper('registerUser.zip')}
                 sx={{gridColumn: 'span 1'}}
-              />
-
-              <TextField
-                fullWidth
-                type='password'
-                label='Password'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.registerUser.password}
-                name='registerUser.password'
-                error={formattedError('registerUser.password')}
-                helperText={formattedHelper('registerUser.password')}
-                sx={{gridColumn: 'span 2'}}
-              />
-
-              <TextField
-                fullWidth
-                type='password'
-                label='Confirm Password'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.confirmPassword}
-                name='confirmPassword'
-                error={formattedError('confirmPassword')}
-                helperText={formattedHelper('confirmPassword')}
-                sx={{gridColumn: 'span 2'}}
-              />
+              />             
+              </div>
+              )}
 
               <Button 
                 type='submit' 
@@ -297,7 +308,7 @@ const handleSubmit = (values) => {
                 onClick={handleSubmit}
             >Register</Button>
             </Box>
-            </form>
+            </form>            
           )
         }}
       </Formik>
