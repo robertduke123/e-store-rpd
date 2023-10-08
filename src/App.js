@@ -9,6 +9,7 @@ import ItemDetails from './scenes/itemDetails/ItemDetails'
 import Footer from './scenes/global/Footer'
 import Signin from './scenes/user/Signin'
 import Register from './scenes/user/Register'
+import Profile from './scenes/user/Profile'
 import Checkout from './scenes/checkout/Checkout'
 
 const ScrollToTop = () => {
@@ -29,6 +30,7 @@ const App = () => {
           <Route path='/' element={<Home/>}/>
           <Route path='/signin' element={<Signin/>}/>
           <Route path='/register' element={<Register/>}/>
+          <Route path='/profile' element={<Profile/>}/>
           <Route path='/item/:itemId' element={<ItemDetails/>}/>
           <Route path='/checkout' element={<Checkout/>}/>
         </Routes>

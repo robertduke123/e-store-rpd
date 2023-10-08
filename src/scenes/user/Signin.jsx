@@ -25,12 +25,12 @@ const users = useSelector((state) => state.cart.users)
 
 
 const handleSubmit = (values) => {
-    // if(values.email !== '' && values.password !== '') {
-    //     if(users[0].email === values.email && users[0].password === values.password) {
-    //         dispatch(setIsSignedIn({}))          
-    //         navigate('/')
-    //     }        
-    // }
+    if(values.email !== '' && values.password !== '') {
+        if(users[0].email === values.email && users[0].password === values.password) {
+            dispatch(setIsSignedIn({}))          
+            navigate('/')
+        }        
+    }
     console.log('test!!!!');
 }
 

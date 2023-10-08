@@ -105,7 +105,7 @@ const Checkout = () => {
         initialValues.shippingAddress.lastName = user.lastName
         initialValues.email = user.email
         initialValues.phoneNumber = user.phone
-        if(user.city !== '') { 
+        if(user.city === '') { 
           initialValues.billingAddress.country = user.streetAddress1
           initialValues.billingAddress.street1 = user.streetAddress2
           initialValues.billingAddress.street2 = user.city

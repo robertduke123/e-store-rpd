@@ -99,7 +99,7 @@ const Navbar = () => {
             sx={{color: 'black'}}
             onClick={() => {
               isSignedIn ? 
-              navigate('/register') :
+              navigate('/profile') :
               navigate('/signin')
               setSearch('hide')
               setSearchItem('')
