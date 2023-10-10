@@ -87,6 +87,9 @@ export const cartSlice = createSlice({
         onRegisterUser: (state, action) => {
             state.users.push(action.payload)
         },
+        editUser: (state, action) => {
+            state.users[0] = action.payload.user
+        },
         setIsSignedIn: (state) => {
             state.isSignedIn = true            
         },
@@ -131,6 +134,7 @@ export const cartSlice = createSlice({
 
 export const {
     onRegisterUser,
+    editUser,
     setIsSignedIn,
     setItems,
     addToCart,

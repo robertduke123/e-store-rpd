@@ -1,7 +1,9 @@
 import React, {useState} from 'react'
 import { Box, Typography,TextField, Button } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import * as yup from 'yup'
 import { Formik, getIn} from 'formik'
+import { editUser } from '../../state'
 
 const initialValues = {
   profileUser: {
@@ -18,43 +20,25 @@ const initialValues = {
   }
 }
 
-// const profileSchema = yup.object().shape({
-//   profileUser: yup.object().shape({
-//     firstName: yup.string().required('required'),
-//     lastName: yup.string().required('required'),
-//     email: yup.string().required('required'),
-//     phone: yup.string().required('required'),
-//     skipAddress: yup.boolean(),
-//     streetAddress1: yup.string().when('skipAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     }),
-//     streetAddress2: yup.string().when('skipAddress', {
-//       is: false,
-//       then: () => yup.string()
-//     }),
-//     city: yup.string().when('skipAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     }),
-//     country: yup.string().when('skipAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     }),
-//     state: yup.string().when('skipAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     }),
-//     zip: yup.string().when('skipAddress', {
-//       is: false,
-//       then: () => yup.string().required('required')
-//     })
-//   })
-// })
+const editProfileSchema = yup.object().shape({
+  profileUser: yup.object().shape({
+    firstName: yup.string().required('required'),
+    lastName: yup.string().required('required'),
+    email: yup.string().required('required'),
+    phone: yup.string().required('required'),
+    streetAddress1: yup.string(),
+    streetAddress2: yup.string(),
+    city: yup.string(),
+    country: yup.string(),
+    state: yup.string(),
+    zip: yup.string(),
+  })
+})
 
 const Profile = () => {
     const user = useSelector((state) => state.cart.users[0])
-    const [profileRoute, setProfileRoute] = useState('details')
+    const dispatch = useDispatch()
+    const [profileRoute, setProfileRoute] = useState('editDetails')
 
 const editProfile = () => {
   initialValues.profileUser.firstName = user.firstName
@@ -70,6 +54,13 @@ const editProfile = () => {
 
   setProfileRoute('editDetails')
 }
+
+ const handleEdit = (values) => {
+    // e.preventDefault()
+    dispatch(editUser({user: values.profileUser}))
+    // setProfileRoute('details')
+    console.log('test');
+ }
 
 
   return (
@@ -125,8 +116,8 @@ const editProfile = () => {
       <Box width='80%' m='10% auto'  >
       <Formik
         initialValues={initialValues}
-        // onSubmit={handleSubmit}
-        // validationSchema={profileSchema}
+        onSubmit={handleEdit}
+        validationSchema={editProfileSchema}
       >
         {({
           values,
@@ -134,15 +125,15 @@ const editProfile = () => {
           touched,
           handleBlur,
           handleChange,
-          handleSubmit,
+          handleEdit,
         }) =>{ 
-          // console.log(values);
+          console.log(values);
 
           const formattedError = (field) =>  Boolean(getIn(touched, field)) &&  getIn(errors, field)
 
           const formattedHelper = (field) => getIn(touched, field) && getIn(errors, field)
           return(
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleEdit}>
             <Box
               display='grid'
               gap='15px'
@@ -286,14 +277,30 @@ const editProfile = () => {
                 color='primary' 
                 sx={{
                         height: '50px', 
-                        gridColumn: 'span 2',
+                        gridColumn: 'span 1',
                         backgroundColor: "#999999",
                         boxShadow: 'none',
                         color: 'white',
                         borderRadius: 0,
                         padding: '15px 40px'
                       }}
-                onClick={handleSubmit}
+                onClick={() => setProfileRoute('details')}
+            >Back</Button>
+
+              <Button 
+                type='submit' 
+                variant='contained' 
+                color='primary' 
+                sx={{
+                        height: '50px', 
+                        gridColumn: 'span 1',
+                        backgroundColor: "#999999",
+                        boxShadow: 'none',
+                        color: 'white',
+                        borderRadius: 0,
+                        padding: '15px 40px'
+                      }}
+                onClick={handleEdit}
             >Save</Button>
             </Box>
             </form>            
