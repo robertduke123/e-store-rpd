@@ -80,7 +80,7 @@ const handleSubmit = (values) => {
 
             <TextField
               fullWidth
-              typeof='password'
+              type='password'
               label='Password'
               onBlur={handleBlur}
               onChange={handleChange}

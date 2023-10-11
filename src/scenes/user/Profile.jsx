@@ -16,11 +16,16 @@ const initialValues = {
     city: '',
     country: '',
     state: '',
-    zip: ''
+    zipCode: ''
+  },
+  profilePassword: {
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
   }
 }
 
-const editProfileSchema = yup.object().shape({
+const editProfileSchema = [yup.object().shape({
   profileUser: yup.object().shape({
     firstName: yup.string().required('required'),
     lastName: yup.string().required('required'),
@@ -31,9 +36,16 @@ const editProfileSchema = yup.object().shape({
     city: yup.string(),
     country: yup.string(),
     state: yup.string(),
-    zip: yup.string(),
+    zipCode: yup.string(),
   })
-})
+}),
+yup.object().shape({
+  profilePassword: yup.object().shape({
+    oldPassword: yup.string().required('required'),
+    newPassword: yup.string().required('required'),
+    confirmPassword: yup.string().required('required')
+  })
+})]
 
 const Profile = () => {
     const user = useSelector((state) => state.cart.users[0])
@@ -50,13 +62,21 @@ const editProfile = () => {
   initialValues.profileUser.city = user.city
   initialValues.profileUser.country = user.country
   initialValues.profileUser.state = user.state
-  initialValues.profileUser.zip = user.zipCode
+  initialValues.profileUser.zipCode = user.zipCode
 
   setProfileRoute('editDetails')
 }
 
- const handleSubmit = async(values) => {
-    await dispatch(editUser({user: values.profileUser}))
+
+ const handleSubmit = (values) => {
+  if(profileRoute === 'editDetails') {
+     dispatch(editUser({user: {...user, ...values.profileUser}})) 
+    } else {
+     if(values.profilePassword.oldPassword === user.password && values.profilePassword.newPassword === values.profilePassword.confirmPassword){
+      let password = values.profilePassword.confirmPassword
+     dispatch(editUser({user: {...user, password}}))
+    }
+  }
     setProfileRoute('details')
  }
 
@@ -91,7 +111,8 @@ const editProfile = () => {
                   <Typography>{user?.city}</Typography>
                   <Typography>{user?.country}</Typography>
                   <Typography>{user?.state}</Typography>
-                  <Typography>{user?.zipCode}</Typography>            
+                  <Typography>{user?.zipCode}</Typography> 
+                  <Typography>{user?.password}</Typography>            
               </Box>
             </Box>
 
@@ -105,23 +126,7 @@ const editProfile = () => {
             sx={{backgroundColor: 'lightblue'}}
             >
               <Button onClick={editProfile}>Edit Account Details</Button>
-              <Button onClick={() => {
-                dispatch(editUser({user: {
-                  city: "r", 
-                  country: "r",
-                  email:"r",
-                  firstName: "googly",
-                  lastName: "r",
-                  password:"r",
-                  phone: "r",
-                  state: "r",
-                  streetAddress1: "r",
-                  streetAddress2: "r",
-                  zipCode: "r"
-                }}))
-                // console.log(ini.profileUser)
-
-                }}>Change Password</Button>
+              <Button onClick={() => setProfileRoute('editPassword')}>Change Password</Button>
             </Box>      
           </Box>
     ) :
@@ -131,7 +136,7 @@ const editProfile = () => {
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
-        validationSchema={editProfileSchema}
+        validationSchema={editProfileSchema[0]} 
       >
         {({
           values,
@@ -278,10 +283,10 @@ const editProfile = () => {
                 label='Zip Code'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.profileUser.zip}
-                name='profileUser.zip'
-                error={formattedError('profileUser.zip')}
-                helperText={formattedHelper('profileUser.zip')}
+                value={values.profileUser.zipCode}
+                name='profileUser.zipCode'
+                error={formattedError('profileUser.zipCode')}
+                helperText={formattedHelper('profileUser.zipCode')}
                 sx={{gridColumn: 'span 1'}}
               />  
 
@@ -324,7 +329,110 @@ const editProfile = () => {
     </Box>
     ) :
     (
-      <Box></Box>
+      <Box width='80%' m='10% auto'  >
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={editProfileSchema[1]}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+        }) =>{ 
+          console.log(values);
+
+          const formattedError = (field) =>  Boolean(getIn(touched, field)) &&  getIn(errors, field)
+
+          const formattedHelper = (field) => getIn(touched, field) && getIn(errors, field)
+          return(
+            <form onSubmit={handleSubmit}>
+            <Box
+              display='grid'
+              gap='15px'
+              gridTemplateColumns='repeat(2, minmax(0, 1fr))'
+              sx={{gridColumn: 'span 2'}}
+            >
+              <Typography variant='h4' gridColumn='span 2'>Edit Details</Typography>
+              <TextField
+                fullWidth
+                 type='password'
+                label='Old Password'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.profilePassword.oldPassword}
+                name='profilePassword.oldPassword'
+                error={formattedError('profilePassword.oldPassword')}
+                helperText={formattedHelper('profilePassword.oldPassword')}
+                sx={{gridColumn: 'span 2'}}
+              />
+
+              <TextField
+                fullWidth
+                typeof='text'
+                label='New Password'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.profilePassword.newPassword}
+                name='profilePassword.newPassword'
+                error={formattedError('profilePassword.newPassword')}
+                helperText={formattedHelper('profilePassword.newPassword')}
+                sx={{gridColumn: 'span 2'}}
+              /> 
+
+              <TextField
+                fullWidth
+                 type='password'
+                label='Confirm Password'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.profilePassword.confirmPassword}
+                name='profilePassword.confirmPassword'
+                error={formattedError('profilePassword.confirmPassword')}
+                helperText={formattedHelper('profilePassword.confirmPassword')}
+                sx={{gridColumn: 'span 2'}}
+              /> 
+
+              <Button 
+                type='submit' 
+                variant='contained' 
+                color='primary' 
+                sx={{
+                        height: '50px', 
+                        gridColumn: 'span 1',
+                        backgroundColor: "#999999",
+                        boxShadow: 'none',
+                        color: 'white',
+                        borderRadius: 0,
+                        padding: '15px 40px'
+                      }}
+                onClick={() => setProfileRoute('details')}
+            >Back</Button>
+
+              <Button 
+                // type='submit' 
+                variant='contained' 
+                color='primary' 
+                sx={{
+                        height: '50px', 
+                        gridColumn: 'span 1',
+                        backgroundColor: "#999999",
+                        boxShadow: 'none',
+                        color: 'white',
+                        borderRadius: 0,
+                        padding: '15px 40px'
+                      }}
+                onClick={handleSubmit}
+            >Save</Button>
+            </Box>
+            </form>            
+          )
+        }}
+      </Formik>
+    </Box>
     )
     
   )
