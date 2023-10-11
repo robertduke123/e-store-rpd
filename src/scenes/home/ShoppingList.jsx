@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography, Tab, Tabs, useMediaQuery } from '@mui/material'
+import { commerce } from '../../lib/commerce'
 import Item from '../../component/Item'
 import { setItems } from '../../state'
 
@@ -29,16 +30,31 @@ const ShoppingList = () => {
     //     getItems()
     // }, [])
 
+    const fetchItems = async() => {
+    const {data} = await commerce.products.list()
+    dispatch(setItems(data))
+  }
+
+  useEffect(() => {
+    fetchItems()
+  }, [])
+
     let topRatedItems
     let newArrivalsItems
     let bestSellersItems
 
-    if(items) {
-        topRatedItems = items.filter((item) => item.category === 'topRated')
-        newArrivalsItems = items.filter((item) => item.category === 'newArrivals')
-        bestSellersItems = items.filter((item) => item.category === 'bestSellers')    
+    if(items?.length > 0) {
+        topRatedItems = items.filter((item) => item?.categories[0].name === 'top rated')
+        newArrivalsItems = items.filter((item) => item?.categories[0].name === 'new arrivals')
+        bestSellersItems = items.filter((item) => item?.categories[0].name === 'best sellers')   
+        console.log(topRatedItems); 
     }
     
+
+    // useEffect(() => {
+    //    items?.length > 0 && loadCategories()
+    // }, [items])
+
 
   return (
     <Box width='80%' margin='80px auto'>

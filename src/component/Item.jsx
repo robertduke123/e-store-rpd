@@ -35,7 +35,7 @@ const Item = ({item, width}) => {
                 alt={name}
                 width='300px'
                 height='400px'
-                src={image}
+                src={image.url}
                 onClick={() => {navigate(`/item/${id}`)}}
                 style={{ cursor: 'pointer', objectFit: 'cover'}}
             />
@@ -84,7 +84,7 @@ const Item = ({item, width}) => {
                 .replace(/^./, (str) => str.toUpperCase())}
             </Typography> */}
             <Typography>{name}</Typography>
-            <Typography fontWeight='bold'>{price}</Typography>
+            <Typography fontWeight='bold'>{price.formatted_with_symbol}</Typography>
         </Box>
     </Box>
   )

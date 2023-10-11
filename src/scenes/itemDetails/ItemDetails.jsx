@@ -68,7 +68,7 @@ const ItemDetails = () => {
             alt={item?.name}
             width='100%'
             height='100%'
-            src={item?.image}
+            src={item?.image.url}
             style={{objectFit: 'contain', maxHeight: '500px'}}
           />
         </Box>
@@ -82,8 +82,8 @@ const ItemDetails = () => {
 
           <Box m='65px 0 25px 0'>
             <Typography variant='h3'>{item?.name}</Typography>
-            <Typography>{item?.price}</Typography>
-            <Typography sx={{mt: '20px'}}>{item?.description}</Typography>
+            <Typography>{item?.price.formatted_with_symbol}</Typography>
+            <Typography sx={{mt: '20px'}} dangerouslySetInnerHTML={{__html: item.description}} />
           </Box>
 
           {/* COUNT & BUTTON */}
@@ -138,8 +138,8 @@ const ItemDetails = () => {
           </Tabs>
          </Box>
          <Box display='flex' flexWrap='wrap' gap='15px'>
-            {value === 'description' && <div>{item?.description}</div>}  
-            {value === 'reviews' && <Review id={item.id} reviews={item?.reviews} confirmReview={confirmReview}/>}  
+            {value === 'description' && <div dangerouslySetInnerHTML={{__html: item.description}} />}  
+            {value === 'reviews' && <Review id={item.id}  confirmReview={confirmReview}/>}  
          </Box>
 
          {/* RELATED ITEMS */}
