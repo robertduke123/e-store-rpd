@@ -38,7 +38,7 @@ const editProfileSchema = yup.object().shape({
 const Profile = () => {
     const user = useSelector((state) => state.cart.users[0])
     const dispatch = useDispatch()
-    const [profileRoute, setProfileRoute] = useState('editDetails')
+    const [profileRoute, setProfileRoute] = useState('details')
 
 const editProfile = () => {
   initialValues.profileUser.firstName = user.firstName
@@ -55,11 +55,9 @@ const editProfile = () => {
   setProfileRoute('editDetails')
 }
 
- const handleEdit = (values) => {
-    // e.preventDefault()
-    dispatch(editUser({user: values.profileUser}))
-    // setProfileRoute('details')
-    console.log('test');
+ const handleSubmit = async(values) => {
+    await dispatch(editUser({user: values.profileUser}))
+    setProfileRoute('details')
  }
 
 
@@ -107,7 +105,23 @@ const editProfile = () => {
             sx={{backgroundColor: 'lightblue'}}
             >
               <Button onClick={editProfile}>Edit Account Details</Button>
-              <Button>Change Password</Button>
+              <Button onClick={() => {
+                dispatch(editUser({user: {
+                  city: "r", 
+                  country: "r",
+                  email:"r",
+                  firstName: "googly",
+                  lastName: "r",
+                  password:"r",
+                  phone: "r",
+                  state: "r",
+                  streetAddress1: "r",
+                  streetAddress2: "r",
+                  zipCode: "r"
+                }}))
+                // console.log(ini.profileUser)
+
+                }}>Change Password</Button>
             </Box>      
           </Box>
     ) :
@@ -116,7 +130,7 @@ const editProfile = () => {
       <Box width='80%' m='10% auto'  >
       <Formik
         initialValues={initialValues}
-        onSubmit={handleEdit}
+        onSubmit={handleSubmit}
         validationSchema={editProfileSchema}
       >
         {({
@@ -125,7 +139,7 @@ const editProfile = () => {
           touched,
           handleBlur,
           handleChange,
-          handleEdit,
+          handleSubmit,
         }) =>{ 
           console.log(values);
 
@@ -133,7 +147,7 @@ const editProfile = () => {
 
           const formattedHelper = (field) => getIn(touched, field) && getIn(errors, field)
           return(
-            <form onSubmit={handleEdit}>
+            <form onSubmit={handleSubmit}>
             <Box
               display='grid'
               gap='15px'
@@ -288,7 +302,7 @@ const editProfile = () => {
             >Back</Button>
 
               <Button 
-                type='submit' 
+                // type='submit' 
                 variant='contained' 
                 color='primary' 
                 sx={{
@@ -300,7 +314,7 @@ const editProfile = () => {
                         borderRadius: 0,
                         padding: '15px 40px'
                       }}
-                onClick={handleEdit}
+                onClick={handleSubmit}
             >Save</Button>
             </Box>
             </form>            
