@@ -7,12 +7,12 @@ const initialState = {
                 lastName: 'r',
                 email: 'r',
                 phone: 'r',
-                streetAddress1: 'r',
-                streetAddress2: 'r',
-                city: 'r',
-                country: 'r',
-                state: 'r',
-                zipCode: 'r',
+                streetAddress1: '',
+                streetAddress2: '',
+                city: '',
+                country: '',
+                state: '',
+                zipCode: '',
                 password: 'r'
             }
         ],

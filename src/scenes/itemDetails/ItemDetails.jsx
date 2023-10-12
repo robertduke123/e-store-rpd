@@ -83,7 +83,7 @@ const ItemDetails = () => {
           <Box m='65px 0 25px 0'>
             <Typography variant='h3'>{item?.name}</Typography>
             <Typography>{item?.price.formatted_with_symbol}</Typography>
-            <Typography sx={{mt: '20px'}} dangerouslySetInnerHTML={{__html: item.description}} />
+            <Typography sx={{mt: '20px'}} dangerouslySetInnerHTML={{__html: item?.description}} />
           </Box>
 
           {/* COUNT & BUTTON */}
@@ -138,7 +138,7 @@ const ItemDetails = () => {
           </Tabs>
          </Box>
          <Box display='flex' flexWrap='wrap' gap='15px'>
-            {value === 'description' && <div dangerouslySetInnerHTML={{__html: item.description}} />}  
+            {value === 'description' && <div dangerouslySetInnerHTML={{__html: item?.description}} />}  
             {value === 'reviews' && <Review id={item.id}  confirmReview={confirmReview}/>}  
          </Box>
 

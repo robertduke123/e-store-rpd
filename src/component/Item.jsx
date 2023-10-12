@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { IconButton, Box, Typography, Button } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
@@ -10,6 +10,7 @@ const Item = ({item, width}) => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const items = useSelector((state) => state.cart.items)
     const [count, setCount] = useState(1)
     const [isHovered, setIsHovered] = useState(false)
 
@@ -36,7 +37,7 @@ const Item = ({item, width}) => {
                 width='300px'
                 height='400px'
                 src={image.url}
-                onClick={() => {navigate(`/item/${id}`)}}
+                onClick={() => {navigate(`/item/${items.findIndex(object => object.name === item?.name)}`)}}
                 style={{ cursor: 'pointer', objectFit: 'cover'}}
             />
             <Box

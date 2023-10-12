@@ -105,7 +105,7 @@ const Checkout = () => {
         initialValues.shippingAddress.lastName = user.lastName
         initialValues.email = user.email
         initialValues.phoneNumber = user.phone
-        if(user.city === '') { 
+        if(user.streetAddress1 !== '' && user.streetAddress2 !== '' && user.city !== '' && user.country !== '' && user.state !== '' && user.zipCode !== '') { 
           initialValues.billingAddress.country = user.streetAddress1
           initialValues.billingAddress.street1 = user.streetAddress2
           initialValues.billingAddress.street2 = user.city
@@ -124,7 +124,7 @@ const Checkout = () => {
 
     useEffect(() => {
         onLoad()
-    }, [])
+    }, [isSignedIn])
 
 
   const handleFormSubmit = async (values, actions) => {

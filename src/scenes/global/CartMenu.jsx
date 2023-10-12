@@ -22,7 +22,7 @@ const CartMenu = () => {
     const isCartOpen = useSelector((state) => state.cart.isCartOpen)
 
     const totalPrice = cart.reduce((total, item) => {
-        return total + item.count * item.price
+        return total + item.count * item.price.formatted
     }, 0)
 
     console.log(cart);
@@ -70,7 +70,7 @@ const CartMenu = () => {
                                     alt={item?.name}
                                     width='123px'
                                     height='164px'
-                                    src={item?.image}
+                                    src={item?.image.url}
                                     style={{objectFit: 'cover'}}
                                 />
                             </Box>    
@@ -84,7 +84,7 @@ const CartMenu = () => {
                                         <CloseIcon/>
                                     </IconButton>
                                 </FlexBox>
-                                <Typography>{item.description}</Typography>
+                                <Typography  dangerouslySetInnerHTML={{__html: item?.description}} />
                                 {/* AMOUNT */}
                                 <FlexBox m='15px 0'>
                                     <Box
@@ -101,7 +101,7 @@ const CartMenu = () => {
                                         </IconButton>
                                     </Box>
                                     {/* Price */}
-                                <Typography fontWeight='bold'>{item.price}</Typography>
+                                <Typography fontWeight='bold'>{item.price.formatted_with_symbol}</Typography>
                                 </FlexBox>
                             </Box>                
                         </FlexBox>
