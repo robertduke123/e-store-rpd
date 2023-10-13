@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import { InputLabel, Select, MenuItem, Button, Grid, Typography } from '@material-ui/core'
+import { InputLabel, Select, MenuItem, Button, Grid, Typography } from '@mui/material'
 import { useForm, FormProvider } from 'react-hook-form'
-import { Link } from 'react-router-dom'
 import FormInput from './FormInput'
 import { commerce } from '../../lib/commerce'
 
@@ -40,7 +39,7 @@ const AddressForm = ({checkoutToken, next}) => {
     }
 
     useEffect(() => {
-        fetchShippinCountries(checkoutToken.id)
+        fetchShippinCountries(checkoutToken?.id)
     }, [])
 
     useEffect(() => {
@@ -48,7 +47,7 @@ const AddressForm = ({checkoutToken, next}) => {
     }, [shippingCountry])
 
     useEffect(() => {
-        shippingSubdivision && fetchShippingOptions(checkoutToken.id, shippingCountry, shippingSubdivision)
+        shippingSubdivision && fetchShippingOptions(checkoutToken?.id, shippingCountry, shippingSubdivision)
     }, [shippingSubdivision])
 
   return (
@@ -96,8 +95,19 @@ const AddressForm = ({checkoutToken, next}) => {
             </Grid>
             <br/>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <Button component={Link} to='/cart' variant='outlined'>Back to Cart</Button>
-                <Button type='submit' variant='contained' color='primary'>Next</Button>
+                <Button 
+                type='submit' 
+                fullWidth 
+                variant='contained' 
+                color='primary'
+                sx={{
+                      backgroundColor: "#999999",
+                      boxShadow: 'none',
+                      color: 'white',
+                      borderRadius: 0,
+                      padding: '15px 40px'
+                    }}
+                >Next</Button>
             </div>
         </form>
       </FormProvider>

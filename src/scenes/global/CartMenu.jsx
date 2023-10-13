@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import styled from '@emotion/styled'
-import { decreaseCount, increaseCount, removeFromCart, setIsCartOpen } from '../../state'
+import { decreaseCount, increaseCount, removeFromCart, addToken, setIsCartOpen } from '../../state'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {commerce} from '../../lib/commerce'
@@ -26,9 +26,21 @@ const CartMenu = () => {
         return total + item.count * item.price.formatted
     }, 0)
 
+    const generateToken = async () => {
+    const cart = await commerce.cart.retrieve()
+    try {
+    const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' })
+    dispatch(addToken({checkoutToken: token})) 
+    console.log(token);
+    } catch(error) {
+          console.log(error);
+    }
+  }
+
     const handleCart = async() => {    
     await commerce.cart.empty()
     await cart.forEach((item) => commerce.cart.add(item.id, item.count))
+    await generateToken()
     }
 
     

@@ -19,7 +19,7 @@ const initialState = {
         isSignedIn: false,
         isCartOpen: false,
         cart: [],
-        items: [],
+        checkoutToken: null
         
     }
 
@@ -72,6 +72,9 @@ export const cartSlice = createSlice({
         setIsCartOpen: (state) => {
             state.isCartOpen = !state.isCartOpen
         },
+        addToken: (state, action) => {
+            state.checkoutToken = action.payload.checkoutToken
+        },
         addReview: (state, action) => {
             state.items[action.payload.id].id === action.payload.id &&
             console.log(state.items[action.payload.id].reviews);
@@ -91,6 +94,7 @@ export const {
     decreaseCount,
     emptyCart,
     setIsCartOpen,
+    addToken,
     addReview
 } = cartSlice.actions
 

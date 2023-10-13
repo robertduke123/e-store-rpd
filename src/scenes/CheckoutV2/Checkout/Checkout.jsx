@@ -1,31 +1,43 @@
 import React, { useState, useEffect } from 'react'
-import { Paper, Stepper, Step, StepLabel,Typography, CircularProgress, Divider, Button, CssBaseline } from '@material-ui/core'
+import { Stepper, Step, StepLabel,Typography, CircularProgress, Divider, Button, Box } from '@mui/material'
 import AddressForm from '../AddressForm'
 import PaymentForm from '../PaymentForm'
 import { commerce } from '../../../lib/commerce'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { emptyCart } from '../../../state'
+import { useNavigate } from 'react-router-dom'
 
 const steps = ['Shipping address', 'Payment details']
 
 const Checkout = () => {
     const cart = useSelector((state => state.cart.cart))
+    const checkoutToken = useSelector((state) =>  state.cart.checkoutToken)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [activeStep, setActiveStep] = useState(0)
-    const [ checkoutToken, setCheckoutToken] = useState(null)
     const [ shippingData, setShippingData ] = useState({})
+    const [order, setOrder] = useState({})
+    const [errorMessage, setErrorMessage] = useState('')
     const [isFinished, setIsFinished] = useState(false)
 
-    useEffect(() => {
-        const generateToken = async () => {
-            try{
-                const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' })
-                setCheckoutToken(token)  
-            } catch(error) {
-                console.log(error);
-                navigate('/')
-            }
-        }
-        cart.id && generateToken()
-    }, [])
+    // console.log(checkoutToken);
+
+    // useEffect(() => {
+    //     generateToken()
+    //     console.log(checkoutToken);
+    // }, [])
+
+    const handleCaptureCheckout = async(checkoutTokenId, newOrder) => {
+    try{
+      const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder)
+
+      setOrder(incomingOrder)
+      commerce.cart.refresh()
+        dispatch(emptyCart({}))
+    } catch(error) {
+      setErrorMessage(error.data.error.message)
+    }
+  }
 
     const nextStep = () => setActiveStep((prevState) => prevState + 1)
     const prevStep = () => setActiveStep((prevState) => prevState - 1)
@@ -42,13 +54,10 @@ const Checkout = () => {
     } 
 
   return (
-    <>
-    <CssBaseline/>
-      <div className={classes.toolbar}/>
-      <main className={classes.layout}>
-        <Paper className={classes.paper}>
+        
+      <Box width='80%' m='10% auto'>
             <Typography variant='h4' align='center'>Checkout</Typography>
-            <Stepper activeStep={activeStep} className={classes.stepper}>
+            <Stepper activeStep={activeStep}>
                 {steps.map((step => (
                     <Step key={step}>
                         <StepLabel>{step}</StepLabel>
@@ -57,32 +66,68 @@ const Checkout = () => {
             </Stepper>
             {activeStep === steps.length ?
             order.customer ?
-            error ? 
+            errorMessage ? 
                 <>
-                    <Typography variant='h5'>Error: {error}</Typography>
+                    <Typography variant='h5'>Error: {errorMessage}</Typography>
                     <br/>
-                    <Button component={Link} to='/' variant='outlined' type='button'>Back to Home</Button>
+                    <Button 
+                    onClick={() => navigate('/')} 
+                    type='button'                    
+                    variant='contained' 
+                    color='primary'
+                    sx={{
+                        backgroundColor: "#999999",
+                        boxShadow: 'none',
+                        color: 'white',
+                        borderRadius: 0,
+                        padding: '15px 40px'
+                        }}
+                    >Back to Home</Button>
                 </> :                
                 isFinished ? 
                 <>
-                    <div>
+                    <div style={{padding: '15px'}}>
                         <Typography variant='h5'>Thank you for your purchase, {order.customer.firstname} {order.customer.lastname}</Typography>
-                        <Divider className={classes.divider}/>
-                        <Typography>Order ref : {order.customer_reference}</Typography>
+                        <Divider/>
+                        <Typography marginTop='10px'>Order ref : {order.customer_reference}</Typography>
                     </div>
                     <br/>
-                    <Button component={Link} to='/' variant='outlined' type='button'>Back to Home</Button>
+                    <Button 
+                    onClick={() => navigate('/')} 
+                    type='button'
+                    variant='contained' 
+                    color='primary'
+                    sx={{
+                        backgroundColor: "#999999",
+                        boxShadow: 'none',
+                        color: 'white',
+                        borderRadius: 0,
+                        padding: '15px 40px'
+                        }}
+                    >Back to Home</Button>
                 </> :
-                <div className={classes.spinner}>
+                <div>
                     <CircularProgress/>
                 </div> :
                  <>
-                    <div>
-                        <Typography variant='h5'>Thank you for your purchase</Typography>
-                        <Divider className={classes.divider}/>
+                    <div style={{padding: '15px'}}>
+                        <Typography variant='h5' >Thank you for your purchase</Typography>
+                        <Divider/>
                     </div>
                     <br/>
-                    <Button component={Link} to='/' variant='outlined' type='button'>Back to Home</Button>
+                    <Button 
+                    onClick={() => navigate('/')} 
+                    type='button'
+                    variant='contained' 
+                    color='primary'
+                    sx={{
+                        backgroundColor: "#999999",
+                        boxShadow: 'none',
+                        color: 'white',
+                        borderRadius: 0,
+                        padding: '15px 40px'
+                        }}
+                    >Back to Home</Button>
                 </> :
                 activeStep === 0 ?
                 <AddressForm
@@ -92,14 +137,13 @@ const Checkout = () => {
                 checkoutToken={checkoutToken !== null && checkoutToken} 
                 shippingData={shippingData} 
                 prevStep={prevStep}
-                onCaptureCheckout={onCaptureCheckout}
+                onCaptureCheckout={handleCaptureCheckout}
                 nextStep={nextStep}
                 timeout={timeout}
                 />
             }
-        </Paper>
-      </main>
-    </>
+      </Box>
+    
   )
 }
 
