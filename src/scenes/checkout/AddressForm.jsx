@@ -8,8 +8,15 @@ const AddressForm = ({
     errors,
     touched,
     handleBlur,
-    handleChange
+    handleChange,
+    checkoutToken
 }) => {
+  const [shippingCountries, setShippingCountries] = useState([])
+    const [shippingCountry, setShippingCountry] = useState('')
+    const [shippingSubdevisions, setShippingSubdevisions] = useState([])
+    const [shippingSubdivision, setShippingSubdivision] = useState('')
+    const [shippingOptions, setShippingOptions] = useState([])
+    const [shippingOption, setShippingOption] = useState('')
 
     const isNonMobile = useMediaQuery('(min-width: 600px)')
     const formattedName = (field) => `${type}.${field}`
@@ -18,6 +25,37 @@ const AddressForm = ({
         getIn(errors, formattedName((field)))
     )
     const formattedHelper = (field) => getIn(touched, formattedName(field)) && getIn(errors, formattedName(field))
+
+        const fetchShippinCountries = async(checkoutTokenId) => {
+        const {countries} = await commerce.services.localeListShippingCountries(checkoutTokenId)
+        setShippingCountries(countries)
+        setShippingCountry((Object.keys(countries)[0]))        
+    }
+
+    const fetchShippingSubdivisions = async (countryCode) => {
+        const {subdivisions} = await commerce.services.localeListSubdivisions(countryCode)
+        setShippingSubdevisions(subdivisions)
+        setShippingSubdivision((Object.keys(subdivisions)[0]))
+    }
+
+    const fetchShippingOptions = async (checkoutTokenId, country, region = null) => {
+        const options = await commerce.checkout.getShippingOptions(checkoutTokenId, { country, region })
+        console.log(options);
+        setShippingOptions(options)
+        setShippingOption(options[0].id)
+    }
+
+    useEffect(() => {
+        fetchShippinCountries(checkoutToken.id)
+    }, [])
+
+    useEffect(() => {
+        shippingCountry && fetchShippingSubdivisions(shippingCountry)
+    }, [shippingCountry])
+
+    useEffect(() => {
+        shippingSubdivision && fetchShippingOptions(checkoutToken.id, shippingCountry, shippingSubdivision)
+    }, [shippingSubdivision])
 
   return (
     <Box

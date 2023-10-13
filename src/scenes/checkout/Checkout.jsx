@@ -1,12 +1,14 @@
 import React, { useState, useEffect} from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Box, Button, Stepper, Step, StepLabel } from '@mui/material'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-// import { shades } from '../../theme'
-// import {loadStripe } from '@stripe/stripe-js'
-// import Payment from './Payment'
+import { emptyCart } from '../../state'
+import {commerce} from '../../lib/commerce'
+import Contact from './Contact'
 import Shipping from './Shipping'
+import Payment from './Payment'
+
 
 const initialValues = {
     billingAddress: {
@@ -91,11 +93,40 @@ const checkoutSchema = [
 const Checkout = () => {
 
   const [activeStep, setActiveStep] = useState(0)
-  const cart = useSelector((state) => state.cart.cart)  
+  const [ checkoutToken, setCheckoutToken] = useState(null)
+  const [order, setOrder] = useState({})
   const user = useSelector((state) => state.cart.users[0])
+  const dispatch = useDispatch()
   const isSignedIn = useSelector((state) => state.cart.isSignedIn)
   const isFirstStep = activeStep === 0
-  const isSecondStep = activeStep === 1
+  const isSecondStep = activeStep === 1  
+  const isThirdStep = activeStep === 2
+
+  const generateToken = async () => {
+    const cart = await commerce.cart.retrieve()
+    try {
+    const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' })
+    setCheckoutToken(token) 
+    } catch(error) {
+          console.log(error);
+    }
+  }
+
+  const handleCaptureCheckout = async(checkoutTokenId, newOrder) => {
+    try{
+      const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder)
+      setOrder(incomingOrder)
+      commerce.cart.refresh()
+      dispatch(emptyCart({}))
+    } catch(error) {
+      // setErrorMessage(error.data.error.message)
+    }
+  }
+
+useEffect(() => {
+  generateToken()
+}, [])
+  
 
   const onLoad = async() => {
     if(isSignedIn){
@@ -105,7 +136,7 @@ const Checkout = () => {
         initialValues.shippingAddress.lastName = user.lastName
         initialValues.email = user.email
         initialValues.phoneNumber = user.phone
-        if(user.streetAddress1 !== '' && user.streetAddress2 !== '' && user.city !== '' && user.country !== '' && user.state !== '' && user.zipCode !== '') { 
+        if(user.streetAddress1 !== '' && user.city !== '' && user.country !== '' && user.state !== '' && user.zipCode !== '') { 
           initialValues.billingAddress.country = user.streetAddress1
           initialValues.billingAddress.street1 = user.streetAddress2
           initialValues.billingAddress.street2 = user.city
@@ -125,32 +156,30 @@ const Checkout = () => {
     useEffect(() => {
         onLoad()
     }, [isSignedIn])
+ 
 
-
-  const handleFormSubmit = async (values, actions) => {
-    setActiveStep(activeStep + 1)
-    console.log('test');
+  const handleFormSubmit = async (values, actions) => {    
+    if(isFirstStep){
+    // generateToken()
     if(isFirstStep && values.shippingAddress.isSameAddress) {
       actions.setFieldValue('shippingAddress', {
         ...values.billingAddress,
         isSameAddress: true
       })
-      // console.log(values);
     }
-    //   if(isSecondStep) {
-    //     makePayment(values)
-    //   }
-
-    //   actions.setTouched({})
-    // }
+  }  
+    setActiveStep(activeStep + 1)
   }
 
-
+  console.log(activeStep);
   return (
     <Box width='80%' m='10% auto'>
       <Stepper activeStep={activeStep} sx={{m: '20px 0'}}>
         <Step>
           <StepLabel>Billing</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Contact</StepLabel>
         </Step>
         <Step>
           <StepLabel>Payment</StepLabel>
@@ -169,7 +198,7 @@ const Checkout = () => {
             handleBlur,
             handleChange,
             handleSubmit,
-            setFieldValue
+            setFieldValue 
           }) => {
             // console.log(values);
             return(
@@ -182,18 +211,27 @@ const Checkout = () => {
                   handleBlur={handleBlur}
                   handleChange={handleChange}
                   setFieldValue={setFieldValue}
+                  checkoutToken={checkoutToken}
                 />
               )}
-              {/* {isSecondStep && (
-                <Payment
+              {isSecondStep && (
+                <Contact
                   values={values}
                   errors={errors}
                   touched={touched}
                   handleBlur={handleBlur}
                   handleChange={handleChange}
-                  setFieldValue={setFieldValue}
-                />
-              )} */}
+                />                
+              )}
+              {isThirdStep && (
+                <Payment 
+                  checkoutToken={checkoutToken} 
+                  values={values} 
+                  activeStep={activeStep} 
+                  setActiveStep={setActiveStep}
+                  handleCaptureCheckout={handleCaptureCheckout}
+                  />
+              )}
               <Box display='flex' justifyContent='space-between' gap='50px'>
                 {isSecondStep && (
                   <Button
@@ -210,6 +248,7 @@ const Checkout = () => {
                     onClick={() => setActiveStep(activeStep - 1)}
                   >BACK</Button>
                 )}
+                {!isThirdStep && (
                   <Button
                     fullWidth
                     type='submit'
@@ -222,8 +261,9 @@ const Checkout = () => {
                       borderRadius: 0,
                       padding: '15px 40px'
                     }}
-                    // onClick={() => setActiveStep(activeStep + 1)}
-                  >{isFirstStep? 'NEXT' : 'PLACE ORDER'}</Button>
+                    onClick={handleSubmit}
+                  >NEXT</Button>
+                )}                  
               </Box>
             </form>
           )}}

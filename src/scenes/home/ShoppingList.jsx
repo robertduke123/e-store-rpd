@@ -11,7 +11,6 @@ const ShoppingList = () => {
     const [value, setValue] = useState('all')
     const items = useSelector((state) => state.cart.items)
     const isNonMobile = useMediaQuery('(min-width: 600px')
-    // console.log(items && items.map((item) => item.attributes))
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
@@ -46,8 +45,7 @@ const ShoppingList = () => {
     if(items?.length > 0) {
         topRatedItems = items.filter((item) => item?.categories[0].name === 'top rated')
         newArrivalsItems = items.filter((item) => item?.categories[0].name === 'new arrivals')
-        bestSellersItems = items.filter((item) => item?.categories[0].name === 'best sellers')   
-        console.log(topRatedItems); 
+        bestSellersItems = items.filter((item) => item?.categories[0].name === 'best sellers')  
     }
     
 

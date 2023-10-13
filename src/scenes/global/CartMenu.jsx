@@ -7,6 +7,7 @@ import styled from '@emotion/styled'
 import { decreaseCount, increaseCount, removeFromCart, setIsCartOpen } from '../../state'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import {commerce} from '../../lib/commerce'
 
 const FlexBox = styled(Box)`
     display: flex;
@@ -25,7 +26,12 @@ const CartMenu = () => {
         return total + item.count * item.price.formatted
     }, 0)
 
-    console.log(cart);
+    const handleCart = async() => {    
+    await commerce.cart.empty()
+    await cart.forEach((item) => commerce.cart.add(item.id, item.count))
+    }
+
+    
     
 
   return (
@@ -127,7 +133,7 @@ const CartMenu = () => {
                         }}
                         onClick={() => {
                             if(cart.length > 0) { 
-                                console.log('test');
+                            handleCart()                            
                             navigate('/checkout')
                             dispatch(setIsCartOpen({}))
                             }

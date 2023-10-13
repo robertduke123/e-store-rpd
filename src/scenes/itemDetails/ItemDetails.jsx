@@ -23,7 +23,6 @@ const ItemDetails = () => {
     setValue(newValue)
   }
 
-  console.log(items[itemId]);
 
 
     async function getItem() {

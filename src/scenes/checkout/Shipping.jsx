@@ -9,7 +9,8 @@ const Shipping = ({
     handleBlur,
     handleChange,
     handleSubmit,
-    setFieldValue
+    setFieldValue,
+    checkoutToken
 }) => {
   return (
     <Box m='30px auto'>
@@ -23,6 +24,7 @@ const Shipping = ({
             touched={touched}
             handleBlur={handleBlur}
             handleChange={handleChange}
+            checkoutToken={checkoutToken}
         />
       </Box>
 

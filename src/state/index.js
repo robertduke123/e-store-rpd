@@ -7,12 +7,12 @@ const initialState = {
                 lastName: 'r',
                 email: 'r',
                 phone: 'r',
-                streetAddress1: '',
-                streetAddress2: '',
-                city: '',
-                country: '',
-                state: '',
-                zipCode: '',
+                streetAddress1: 'r',
+                streetAddress2: 'r',
+                city: 'r',
+                country: 'r',
+                state: 'r',
+                zipCode: 'r',
                 password: 'r'
             }
         ],
@@ -66,6 +66,9 @@ export const cartSlice = createSlice({
                 return item
             })
         },
+        emptyCart : (state) => {
+            state.cart = []
+        },
         setIsCartOpen: (state) => {
             state.isCartOpen = !state.isCartOpen
         },
@@ -86,6 +89,7 @@ export const {
     removeFromCart,
     increaseCount,
     decreaseCount,
+    emptyCart,
     setIsCartOpen,
     addReview
 } = cartSlice.actions

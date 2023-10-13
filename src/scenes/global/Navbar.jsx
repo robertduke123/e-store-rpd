@@ -28,7 +28,6 @@ const Navbar = () => {
       setFilteredItems(filterItems);
     }
 
-    console.log(filteredItems);
 
     // document.addEventListener('click', () => setSearch('hide'))
 

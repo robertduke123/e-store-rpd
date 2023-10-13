@@ -69,7 +69,6 @@ const dispatch = useDispatch()
 const handleSubmit = (values) => {
 
   if(values.registerUser.password === values.confirmPassword) {
-    console.log(users);
     dispatch(onRegisterUser(values.registerUser))
     dispatch( setIsSignedIn({}))
     navigate('/')
@@ -92,8 +91,6 @@ const handleSubmit = (values) => {
           handleSubmit,
           setFieldValue
         }) =>{ 
-          console.log(values);
-
           const formattedError = (field) =>  Boolean(getIn(touched, field)) &&  getIn(errors, field)
 
           const formattedHelper = (field) => getIn(touched, field) && getIn(errors, field)
