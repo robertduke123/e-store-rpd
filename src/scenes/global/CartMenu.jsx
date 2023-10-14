@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import styled from '@emotion/styled'
-import { decreaseCount, increaseCount, removeFromCart, addToken, setIsCartOpen } from '../../state'
+import { decreaseCount, increaseCount, removeFromCart, addToken, addShippingMulti, addShippingSingle ,setIsCartOpen } from '../../state'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {commerce} from '../../lib/commerce'
@@ -32,6 +32,21 @@ const CartMenu = () => {
     const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' })
     dispatch(addToken({checkoutToken: token})) 
     console.log(token);
+
+   const {countries} = await commerce.services.localeListShippingCountries(token.id)        
+            dispatch(addShippingMulti({countries: countries}))
+            dispatch(addShippingSingle({country: Object.keys(countries)[0]})) 
+            let countryCode = Object.keys(countries)[0]
+
+    const {subdivisions} = await commerce.services.localeListSubdivisions(countryCode)        
+            dispatch(addShippingMulti({subs: subdivisions}))
+            dispatch(addShippingSingle({sub: Object.keys(subdivisions)[0]}))
+            let subdivision = Object.keys(subdivisions)[0]
+
+    const options = await commerce.checkout.getShippingOptions(token.id, { country: countryCode, region: subdivision })        
+            dispatch(addShippingMulti({options: options}))
+            dispatch(addShippingSingle({option: options[0].id}))
+
     } catch(error) {
           console.log(error);
     }
@@ -42,9 +57,6 @@ const CartMenu = () => {
     await cart.forEach((item) => commerce.cart.add(item.id, item.count))
     await generateToken()
     }
-
-    
-    
 
   return (
     <Box //overlay 

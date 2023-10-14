@@ -19,7 +19,17 @@ const initialState = {
         isSignedIn: false,
         isCartOpen: false,
         cart: [],
-        checkoutToken: null
+        checkoutToken: {},
+        shippingMulti: {
+            countries: [],
+            subs: [],
+            options: []
+        },
+        shippingSingle: {
+            country: [],
+            sub: [],
+            option: []
+        }
         
     }
 
@@ -75,6 +85,12 @@ export const cartSlice = createSlice({
         addToken: (state, action) => {
             state.checkoutToken = action.payload.checkoutToken
         },
+        addShippingMulti: (state, action) => {
+            state.shippingMulti = {...state.shippingMulti, ...action.payload}
+        },
+        addShippingSingle: (state, action) => {
+            state.shippingSingle = {...state.shippingSingle, ...action.payload}
+        },
         addReview: (state, action) => {
             state.items[action.payload.id].id === action.payload.id &&
             console.log(state.items[action.payload.id].reviews);
@@ -95,6 +111,8 @@ export const {
     emptyCart,
     setIsCartOpen,
     addToken,
+    addShippingMulti,
+    addShippingSingle,
     addReview
 } = cartSlice.actions
 
