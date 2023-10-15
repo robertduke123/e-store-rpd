@@ -27,9 +27,11 @@ const CartMenu = () => {
     }, 0)
 
     const generateToken = async () => {
-    const cart = await commerce.cart.retrieve()
+    await commerce.cart.empty()
+    await cart.forEach((item) => commerce.cart.add(item.id, item.count))    
+    const comCart = await commerce.cart.retrieve()
     try {
-    const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' })
+    const token = await commerce.checkout.generateToken(comCart.id, { type: 'cart' })
     dispatch(addToken({checkoutToken: token})) 
     console.log(token);
 
@@ -57,6 +59,7 @@ const CartMenu = () => {
     await cart.forEach((item) => commerce.cart.add(item.id, item.count))
     await generateToken()
     }
+
 
   return (
     <Box //overlay 
@@ -157,7 +160,7 @@ const CartMenu = () => {
                         }}
                         onClick={() => {
                             if(cart.length > 0) { 
-                            handleCart()                            
+                            generateToken()                            
                             navigate('/checkout')
                             dispatch(setIsCartOpen({}))
                             }

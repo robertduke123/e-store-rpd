@@ -14,10 +14,7 @@ const initialValues = {
     phone: '', 
     skipAddress: false,
     streetAddress1: '',
-    streetAddress2: '',
     city: '',
-    country: '',
-    state: '',
     zip: '',
     password: ''
   },
@@ -35,19 +32,7 @@ const registerSchema = yup.object().shape({
       is: false,
       then: () => yup.string().required('required')
     }),
-    streetAddress2: yup.string().when('skipAddress', {
-      is: false,
-      then: () => yup.string()
-    }),
     city: yup.string().when('skipAddress', {
-      is: false,
-      then: () => yup.string().required('required')
-    }),
-    country: yup.string().when('skipAddress', {
-      is: false,
-      then: () => yup.string().required('required')
-    }),
-    state: yup.string().when('skipAddress', {
       is: false,
       then: () => yup.string().required('required')
     }),
@@ -209,19 +194,6 @@ const handleSubmit = (values) => {
               <TextField
                 fullWidth
                 typeof='text'
-                label='Street Address 2 (optional)'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.registerUser.streetAddress2}
-                name='registerUser.streetAddress2'
-                error={formattedError('registerUser.streetAddress2')}
-                helperText={formattedHelper('registerUser.streetAddress2')}
-                sx={{gridColumn: 'span 2'}}
-              />
-
-              <TextField
-                fullWidth
-                typeof='text'
                 label='City'
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -229,32 +201,6 @@ const handleSubmit = (values) => {
                 name='registerUser.city'
                 error={formattedError('registerUser.city')}
                 helperText={formattedHelper('registerUser.city')}
-                sx={{gridColumn: 'span 1'}}
-              />
-
-              <TextField
-                fullWidth
-                typeof='text'
-                label='Country'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.registerUser.country}
-                name='registerUser.country'
-                error={formattedError('registerUser.country')}
-                helperText={formattedHelper('registerUser.country')}
-                sx={{gridColumn: 'span 1'}}
-              />
-
-              <TextField
-                fullWidth
-                typeof='text'
-                label='State'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.registerUser.state}
-                name='registerUser.state'
-                error={formattedError('registerUser.state')}
-                helperText={formattedHelper('registerUser.state')}
                 sx={{gridColumn: 'span 1'}}
               />
 
