@@ -43,7 +43,7 @@ export const cartSlice = createSlice({
             state.users[0] = action.payload.user
         },
         setIsSignedIn: (state) => {
-            state.isSignedIn = true            
+            state.isSignedIn = !state.isSignedIn            
         },
         setItems: (state, action) => {
             state.items = action.payload

@@ -1,14 +1,17 @@
 import React, {useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { TextField, Badge, Box, IconButton, Typography } from '@mui/material'
+import { TextField, Badge, Box, IconButton, Typography, Button } from '@mui/material'
 import { PersonOutline, ShoppingBagOutlined, MenuOutlined, SearchOutlined } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
-import { setIsCartOpen } from '../../state'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { setIsCartOpen, setIsSignedIn } from '../../state'
 
 const Navbar = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const location = useLocation()
+
+    console.log(location);
   
     const isSignedIn = useSelector((state) => state.cart.isSignedIn)
     const items = useSelector((state) => state.cart.items)
@@ -16,6 +19,7 @@ const Navbar = () => {
     const [search, setSearch] = useState('hide')
     const [searchItem, setSearchItem] = useState('')
     const [filteredItems, setFilteredItems] = useState(items)
+    const [profileBoxShow, setProfileBoxShow] = useState(false)
 
     const handleInputChange = (e) => { 
       const searchTerm = e.target.value;
@@ -81,7 +85,7 @@ const Navbar = () => {
                 <Typography 
                   sx={{cursor: 'pointer'}} 
                   onClick={() => {
-                    navigate(`/item/${item.id}`)
+                    navigate(`/item/${items.findIndex(object => object.name === item?.name)}`)
                     setSearch('hide')
                     setSearchItem('')
                   }}
@@ -90,15 +94,18 @@ const Navbar = () => {
             </Box> 
           </Box>
            :
-          <IconButton sx={{color: 'black'}} onClick={() => setSearch('show')}>               
+          <IconButton sx={{color: 'black'}} onClick={() => {
+            setSearch('show') 
+            setProfileBoxShow(false)
+            }}>               
             <SearchOutlined/>
           </IconButton>
           }
           <IconButton 
             sx={{color: 'black'}}
             onClick={() => {
-              isSignedIn ? 
-              navigate('/profile') :
+              isSignedIn ?
+              setProfileBoxShow((prev) => !prev) :   
               navigate('/signin')
               setSearch('hide')
               setSearchItem('')
@@ -106,6 +113,34 @@ const Navbar = () => {
           >
             <PersonOutline/>
           </IconButton>
+          {profileBoxShow && (
+            <Box 
+            width='150px' 
+            height='120px' 
+            borderRadius='8px'
+            sx={{
+              position: 'absolute',
+              top: '40px',
+              right: '150px',
+              backgroundColor: 'rgba(243, 236, 236, 0.5)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-around',
+              alignItems: 'center'
+            }}>
+              <Button variant='contained' onClick={() => {
+                navigate('/profile')
+                setProfileBoxShow(false)
+                }}>Profile</Button>
+              <Button variant='contained' onClick={() => {
+                dispatch(setIsSignedIn({}))
+                setProfileBoxShow(false)
+                location.pathname === '/profile' ?
+                navigate('/') : 
+                location.pathname === '/checkout' && navigate('/')
+                }}>Sign Out</Button>
+            </Box>  
+          )}
           <Badge 
             badgeContent={cart.length} 
             color='secondary' 
@@ -124,6 +159,7 @@ const Navbar = () => {
             onClick={() => {
               dispatch(setIsCartOpen({}))
               setSearch('hide')
+              setProfileBoxShow(false)
               setSearchItem('')
             }}
             sx={{color: 'black'}}>
