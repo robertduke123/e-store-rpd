@@ -13,7 +13,7 @@ const initialValues = {
     email: '',
     phone: '', 
     skipAddress: false,
-    streetAddress1: '',
+    address: '',
     city: '',
     zip: '',
     password: ''
@@ -28,7 +28,7 @@ const registerSchema = yup.object().shape({
     email: yup.string().required('required'),
     phone: yup.string().required('required'),
     skipAddress: yup.boolean(),
-    streetAddress1: yup.string().when('skipAddress', {
+    address: yup.string().when('skipAddress', {
       is: false,
       then: () => yup.string().required('required')
     }),
@@ -181,13 +181,13 @@ const handleSubmit = (values) => {
               <TextField
                 fullWidth
                 typeof='text'
-                label='Street Address 1'
+                label='Address'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.registerUser.streetAddress1}
-                name='registerUser.streetAddress1'
-                error={formattedError('registerUser.streetAddress1')}
-                helperText={formattedHelper('registerUser.streetAddress1')}
+                value={values.registerUser.address}
+                name='registerUser.address'
+                error={formattedError('registerUser.address')}
+                helperText={formattedHelper('registerUser.address')}
                 sx={{gridColumn: 'span 2'}}
               />
 

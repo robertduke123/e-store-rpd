@@ -7,13 +7,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addShippingMulti, addShippingSingle } from '../../state'
 
 const AddressForm = ({checkoutToken, next}) => {
-    // const [shippingCountries, setShippingCountries] = useState([])
-    // const [shippingCountry, setShippingCountry] = useState('')
-    // const [shippingSubdevisions, setShippingSubdevisions] = useState([])
-    // const [shippingSubdivision, setShippingSubdivision] = useState('')
-    // const [shippingOptions, setShippingOptions] = useState([])
-    // const [shippingOption, setShippingOption] = useState('')
     const dispatch = useDispatch()
+    const user = useSelector((state) => state.cart.users[0])
+    const isSignedIn = useSelector((state) => state.cart.isSignedIn)
+
     const shippingCountries = useSelector((state) => state.cart.shippingMulti.countries)    
     const shippingSubdevisions = useSelector((state) => state.cart.shippingMulti.subs)
     const shippingOptions = useSelector((state) => state.cart.shippingMulti.options)
@@ -26,13 +23,7 @@ const AddressForm = ({checkoutToken, next}) => {
     const subdivisions = Object.entries(shippingSubdevisions).map(([code, name]) => ({ id: code, label: name})) 
     const options = shippingOptions.map((sO) => ({ id: sO.id, label: `${sO.description} - (${sO.price.formatted_with_symbol})`}))
 
-    // console.log(options);
-
-    // const fetchShippinCountries = async(checkoutTokenId) => {
-    //     const {countries} = await commerce.services.localeListShippingCountries(checkoutTokenId)
-    //     setShippingCountries(countries)
-    //     setShippingCountry((Object.keys(countries)[0]))        
-    // }
+   
 
     const fetchShippingSubdivisions = async (checkoutTokenId ,countryCode) => {
         const {subdivisions} = await commerce.services.localeListSubdivisions(countryCode)        
@@ -74,12 +65,12 @@ const AddressForm = ({checkoutToken, next}) => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit((data) => next({ ...data, shippingCountry, shippingSubdivision, shippingOption }))}>
             <Grid container spacing={3}>
-                <FormInput name='firstName' label='First Name'/>
-                <FormInput name='lastName' label='Last Name'/>
-                <FormInput name='address1' label='Address'/>
-                <FormInput name='email' label='Email'/>
-                <FormInput name='city' label='City'/>
-                <FormInput name='zip' label='ZIP / Postal code'/>
+                <FormInput name='firstName' label='First Name' value={isSignedIn && user.firstName}/>
+                <FormInput name='lastName' label='Last Name' value={isSignedIn && user.lastName}/>
+                <FormInput name='address1' label='Address' value={isSignedIn && user.address}/>
+                <FormInput name='email' label='Email' value={isSignedIn && user.email}/>
+                <FormInput name='city' label='City' value={isSignedIn && user.city}/>
+                <FormInput name='zip' label='ZIP / Postal code' value={isSignedIn && user.zipCode}/>
                 <Grid item xs={12} sm={6}>
                     <InputLabel>Shipping Country</InputLabel>
                     <Select value={shippingCountry} fullWidth onChange={(e) => {
