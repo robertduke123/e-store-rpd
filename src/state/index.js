@@ -26,7 +26,8 @@ const initialState = {
             country: [],
             sub: [],
             option: []
-        }
+        },
+        itemReviews: []
         
     }
 
@@ -89,9 +90,11 @@ export const cartSlice = createSlice({
             state.shippingSingle = {...state.shippingSingle, ...action.payload}
         },
         addReview: (state, action) => {
-            state.items[action.payload.id].id === action.payload.id &&
-            console.log(state.items[action.payload.id].reviews);
-            state.items[action.payload.id].reviews.push(action.payload.review)
+            state.itemReviews.some((item) => {
+                item.id === action.payload.review.id ?
+                item.reviews.push(action.payload.review.reviews) :
+                state.itemReviews.push(action.payload.review)
+            })
         }
      }
 })

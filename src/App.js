@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './scenes/global/Navbar'
 import Home from './scenes/home/Home'
 import CartMenu from './scenes/global/CartMenu'
+import ShoppingList from './scenes/home/ShoppingList'
 import ItemDetails from './scenes/itemDetails/ItemDetails'
 import Footer from './scenes/global/Footer'
 import Signin from './scenes/user/Signin'
@@ -35,6 +36,7 @@ const App = () => {
           <Route path='/signin' element={<Signin/>}/>
           <Route path='/register' element={<Register/>}/>
           <Route path='/profile' element={<Profile/>}/>
+          <Route path='/shopping' element={<ShoppingList/>}/>
           <Route path='/item/:itemId' element={<ItemDetails/>}/>
           <Route path='/checkout' element={<Checkout/>}/>
         </Routes>

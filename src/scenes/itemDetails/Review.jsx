@@ -1,13 +1,14 @@
 import React, {useState} from 'react'
 import { Box, Typography, TextField, Button, Divider } from '@mui/material'
 import { Star, StarBorder } from '@mui/icons-material'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addReview } from '../../state'
 import { current } from '@reduxjs/toolkit'
 
-const Review = ({id, reviews, confirmReview}) => {
+const Review = ({id, confirmReview}) => {
 
     const dispatch = useDispatch()
+    const itemReviews = useSelector((state) => state.cart.itemReviews)
     const [review, setReview]  =useState('')
     const [reviewStars, setReviewStars] = useState({
         one: false,
@@ -16,7 +17,7 @@ const Review = ({id, reviews, confirmReview}) => {
         four: false,
         five: false
     })
-    
+     
     const starReview = (number) => {
         number === 'one' && setReviewStars({one: true, two: false, three: false, four: false, five: false})
         number === 'two' && setReviewStars({one: true, two: true, three: false, four: false, five: false})
@@ -58,7 +59,9 @@ const Review = ({id, reviews, confirmReview}) => {
             >Confirm</Button>
         </div>    
         
-            {reviews.map((review) => (
+            {itemReviews?.map((itemReview) => {
+                itemReview.id === id && 
+                itemReview.reviews?.map((review) => (
                 <Box>  
                     <div display='flex'>
                         {review.stars.map((value) => {
@@ -67,8 +70,10 @@ const Review = ({id, reviews, confirmReview}) => {
                     </div>
                     <Typography>{review.review}</Typography> 
                     <Divider/>
-                </Box>  
+                </Box> 
                 ))
+                } 
+                )
             }
             
       

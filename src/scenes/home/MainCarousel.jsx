@@ -4,6 +4,7 @@ import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
+import { useNavigate } from 'react-router-dom'
 
 const importAll = (r) => 
     r.keys().reduce((acc, item) => {
@@ -19,6 +20,7 @@ const heroTextureImports = importAll(
 const MainCarousel = () => {
 
     const isNonMobile = useMediaQuery('(min-width:600px)')
+    const navigate = useNavigate()
 
   return (
     <Carousel
@@ -87,7 +89,8 @@ const MainCarousel = () => {
                 <Typography
                     fontWeight='bold'
                     color='#e66677'
-                    sx={{textDecoration: 'underline'}}
+                    sx={{textDecoration: 'underline', cursor: 'pointer'}}
+                    onClick={() => navigate('/shopping')}
                 >Discover More
                 </Typography>
             </Box>
