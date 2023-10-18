@@ -51,12 +51,11 @@ const ItemDetails = () => {
       getItem()
     }, [itemId, items]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const confirmReview = (id, review, reviewStars) => {
-        let stars= []
-        Object.entries(reviewStars).forEach(entry => stars.push(entry[1]))
-        dispatch(addReview({id: id, review: {stars, review}}))
-        getItem()
-    }
+    // const confirmReview = (id, review, reviewStars) => {
+    //     let stars= []
+    //     Object.entries(reviewStars).forEach(entry => stars.push(entry[1]))
+    //     dispatch(addReview({review: {id: id, reviews: [{stars, review}]}}))
+    // }
 
   return (
     <Box width='80%' m='80px auto'>
@@ -138,7 +137,7 @@ const ItemDetails = () => {
          </Box>
          <Box display='flex' flexWrap='wrap' gap='15px'>
             {value === 'description' && <div dangerouslySetInnerHTML={{__html: item?.description}} />}  
-            {value === 'reviews' && <Review id={item.id}  confirmReview={confirmReview}/>}  
+            {value === 'reviews' && <Review id={item.id} />}  
          </Box>
 
          {/* RELATED ITEMS */}
@@ -151,7 +150,7 @@ const ItemDetails = () => {
               columnGap='1.33%'
               justifyContent='space-between'
             >
-              {items.slice(0,4).map((item, i) => (
+              {items?.slice(0,4).map((item, i) => (
                 <Item key={`${item.name}-${item.id}`} item={item}/>
               ))}
             </Box>

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addReview } from '../../state'
 import { current } from '@reduxjs/toolkit'
 
-const Review = ({id, confirmReview}) => {
+const Review = ({id}) => {
 
     const dispatch = useDispatch()
     const itemReviews = useSelector((state) => state.cart.itemReviews)
@@ -17,6 +17,18 @@ const Review = ({id, confirmReview}) => {
         four: false,
         five: false
     })
+
+    // useEffect(() => {
+    //   getItem()
+    // }, [itemId, items]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    const confirmReview = (id, review, reviewStars) => {
+        let stars= []
+        Object.entries(reviewStars).forEach(entry => stars.push(entry[1]))
+        dispatch(addReview({review: {id: id, reviews: [{stars, review}]}}))
+    }
+
+    console.log(itemReviews);
      
     const starReview = (number) => {
         number === 'one' && setReviewStars({one: true, two: false, three: false, four: false, five: false})

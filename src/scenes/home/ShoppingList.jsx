@@ -29,15 +29,6 @@ const ShoppingList = () => {
     //     getItems()
     // }, [])
 
-    const fetchItems = async() => {
-    const {data} = await commerce.products.list()
-    dispatch(setItems(data))
-  }
-
-  useEffect(() => {
-    fetchItems()
-  }, [])
-
     let topRatedItems
     let newArrivalsItems
     let bestSellersItems

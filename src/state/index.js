@@ -16,6 +16,7 @@ const initialState = {
         isSignedIn: false,
         isCartOpen: false,
         cart: [],
+        items: [],
         checkoutToken: {},
         shippingMulti: {
             countries: [],
@@ -92,7 +93,7 @@ export const cartSlice = createSlice({
         addReview: (state, action) => {
             state.itemReviews.some((item) => {
                 item.id === action.payload.review.id ?
-                item.reviews.push(action.payload.review.reviews) :
+                item.reviews.push(action.payload.review.reviews[0]) :
                 state.itemReviews.push(action.payload.review)
             })
         }
