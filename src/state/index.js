@@ -91,11 +91,13 @@ export const cartSlice = createSlice({
             state.shippingSingle = {...state.shippingSingle, ...action.payload}
         },
         addReview: (state, action) => {
-            state.itemReviews.some((item) => {
+            state.itemReviews.length > 0 ?
+            state.itemReviews.forEach((item) => {
                 item.id === action.payload.review.id ?
                 item.reviews.push(action.payload.review.reviews[0]) :
                 state.itemReviews.push(action.payload.review)
-            })
+            }) :
+            state.itemReviews.push(action.payload.review)
         }
      }
 })

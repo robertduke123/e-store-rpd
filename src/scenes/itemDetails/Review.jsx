@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Box, Typography, TextField, Button, Divider } from '@mui/material'
 import { Star, StarBorder } from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,6 +9,7 @@ const Review = ({id}) => {
 
     const dispatch = useDispatch()
     const itemReviews = useSelector((state) => state.cart.itemReviews)
+    const [thisReviews, setThisReviews] = useState({})
     const [review, setReview]  =useState('')
     const [reviewStars, setReviewStars] = useState({
         one: false,
@@ -28,7 +29,16 @@ const Review = ({id}) => {
         dispatch(addReview({review: {id: id, reviews: [{stars, review}]}}))
     }
 
-    console.log(itemReviews);
+    // console.log(itemReviews, id);
+    
+    useEffect(() => {
+      itemReviews?.map((itemReview) => {
+        itemReview.id === id && setThisReviews(itemReview.reviews)
+    })  
+    }, [itemReviews])
+    
+
+    console.log(thisReviews);
      
     const starReview = (number) => {
         number === 'one' && setReviewStars({one: true, two: false, three: false, four: false, five: false})
@@ -71,9 +81,7 @@ const Review = ({id}) => {
             >Confirm</Button>
         </div>    
         
-            {itemReviews?.map((itemReview) => {
-                itemReview.id === id && 
-                itemReview.reviews?.map((review) => (
+            {thisReviews.length > 0 && thisReviews.map((review) => (
                 <Box>  
                     <div display='flex'>
                         {review.stars.map((value) => {
@@ -84,9 +92,7 @@ const Review = ({id}) => {
                     <Divider/>
                 </Box> 
                 ))
-                } 
-                )
-            }
+                }
             
       
     </Box>

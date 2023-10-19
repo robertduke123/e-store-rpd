@@ -137,7 +137,7 @@ const ItemDetails = () => {
          </Box>
          <Box display='flex' flexWrap='wrap' gap='15px'>
             {value === 'description' && <div dangerouslySetInnerHTML={{__html: item?.description}} />}  
-            {value === 'reviews' && <Review id={item.id} />}  
+            {value === 'reviews' && <Review id={item?.id} />}  
          </Box>
 
          {/* RELATED ITEMS */}
