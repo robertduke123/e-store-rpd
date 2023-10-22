@@ -1,10 +1,10 @@
 import React from 'react'
 import { Box, TextField, Button, Checkbox, FormControlLabel } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Formik, getIn} from 'formik'
 import * as yup from 'yup'
-import { onRegisterUser, setIsSignedIn } from '../../state'
+import { setIsSignedIn, setUser } from '../../state'
 
 const initialValues = {
   registerUser: {
@@ -46,7 +46,6 @@ const registerSchema = yup.object().shape({
 })
 
 const Register = () => {
-const users = useSelector((state) => state.cart.users)
 const navigate = useNavigate()
 const dispatch = useDispatch()
 
@@ -54,9 +53,28 @@ const dispatch = useDispatch()
 const handleSubmit = (values) => {
 
   if(values.registerUser.password === values.confirmPassword) {
-    dispatch(onRegisterUser(values.registerUser))
-    dispatch( setIsSignedIn({}))
-    navigate('/')
+
+    fetch('http://localhost:3000/register', {
+          method: 'POST',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            firstName: values.registerUser.firstName, 
+            lastName: values.registerUser.lastName,
+            email: values.registerUser.email,
+            phone: values.registerUser.phone,
+            address: values.registerUser.address,
+            city: values.registerUser.city,
+            zip: values.registerUser.zip,
+            password: values.registerUser.password
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          dispatch(setUser({user: data}))
+          console.log(data);
+          dispatch(setIsSignedIn({}))          
+          navigate('/')
+        })
   }
 }
 

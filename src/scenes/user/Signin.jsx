@@ -1,10 +1,10 @@
 import React from 'react'
 import { Box, TextField, Button, Typography } from '@mui/material'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Formik, getIn } from 'formik'
 import * as yup from 'yup'
-import { setIsSignedIn} from '../../state'
+import { setIsSignedIn, setUser} from '../../state'
 
 const initialValues = {
   email: '',
@@ -20,16 +20,32 @@ const signInSchema = yup.object().shape({
 const Signin = () => {
 const navigate = useNavigate()
 const dispatch = useDispatch() 
-const users = useSelector((state) => state.cart.users)  
 
 
 
 const handleSubmit = (values) => {
     if(values.email !== '' && values.password !== '') {
-        if(users[0].email === values.email && users[0].password === values.password) {
-            dispatch(setIsSignedIn({}))          
-            navigate('/')
-        }        
+        // if(users[0].email === values.email && users[0].password === values.password) {
+        //     dispatch(setIsSignedIn({}))          
+        //     navigate('/')
+        // }  
+        
+        fetch('http://localhost:3000/signin', {
+          method: 'POST',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            email: values.email,
+            password: values.password
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          dispatch(setUser({user: data}))
+          dispatch(setIsSignedIn({}))          
+          navigate('/')
+        })
+
     }
     console.log('test!!!!');
 }

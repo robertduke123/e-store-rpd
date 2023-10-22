@@ -3,20 +3,17 @@ import { Box, Typography,TextField, Button } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import * as yup from 'yup'
 import { Formik, getIn} from 'formik'
-import { editUser } from '../../state'
+import { editUser, setUser } from '../../state'
 
 const initialValues = {
   profileUser: {
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     email: '',
     phone: '',
-    streetAddress1: '',
-    streetAddress2: '',
+    address: '',
     city: '',
-    country: '',
-    state: '',
-    zipCode: ''
+    zip: ''
   },
   profilePassword: {
     oldPassword: '',
@@ -27,16 +24,13 @@ const initialValues = {
 
 const editProfileSchema = [yup.object().shape({
   profileUser: yup.object().shape({
-    firstName: yup.string().required('required'),
-    lastName: yup.string().required('required'),
+    first_name: yup.string().required('required'),
+    last_name: yup.string().required('required'),
     email: yup.string().required('required'),
     phone: yup.string().required('required'),
-    streetAddress1: yup.string(),
-    streetAddress2: yup.string(),
+    address: yup.string(),
     city: yup.string(),
-    country: yup.string(),
-    state: yup.string(),
-    zipCode: yup.string(),
+    zip: yup.string(),
   })
 }),
 yup.object().shape({
@@ -48,21 +42,18 @@ yup.object().shape({
 })]
 
 const Profile = () => {
-    const user = useSelector((state) => state.cart.users[0])
+    const user = useSelector((state) => state.cart.user)
     const dispatch = useDispatch()
     const [profileRoute, setProfileRoute] = useState('details')
 
 const editProfile = () => {
-  initialValues.profileUser.firstName = user.firstName
-  initialValues.profileUser.lastName = user.lastName
+  initialValues.profileUser.first_name = user.first_name
+  initialValues.profileUser.last_name = user.last_name
   initialValues.profileUser.email = user.email
   initialValues.profileUser.phone = user.phone
-  initialValues.profileUser.streetAddress1 = user.streetAddress1
-  initialValues.profileUser.streetAddress2 = user.streetAddress2
+  initialValues.profileUser.address = user.address
   initialValues.profileUser.city = user.city
-  initialValues.profileUser.country = user.country
-  initialValues.profileUser.state = user.state
-  initialValues.profileUser.zipCode = user.zipCode
+  initialValues.profileUser.zip = user.zip
 
   setProfileRoute('editDetails')
 }
@@ -70,7 +61,26 @@ const editProfile = () => {
 
  const handleSubmit = (values) => {
   if(profileRoute === 'editDetails') {
-     dispatch(editUser({user: {...user, ...values.profileUser}})) 
+    //  dispatch(editUser({user: {...user, ...values.profileUser}})) 
+      fetch('http://localhost:3000/edit_user', {
+          method: 'PUT',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            id: user.id,
+            newFirst: values.profileUser.first_name, 
+            newLast: values.profileUser.last_name,
+            newEmail: values.profileUser.email,
+            newPhone: values.profileUser.phone,
+            newAddress: values.profileUser.address,
+            newCity: values.profileUser.city,
+            newZip: values.profileUser.zip
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          dispatch(setUser({user: data}))
+          console.log(data);    
+        })
     } else {
      if(values.profilePassword.oldPassword === user.password && values.profilePassword.newPassword === values.profilePassword.confirmPassword){
       let password = values.profilePassword.confirmPassword
@@ -95,7 +105,7 @@ const editProfile = () => {
               <Typography variant='h4' gridColumn='span 2'>Account Overview</Typography>
               
               <Typography m='8px' sx={{fontWeight: 'bold'}} gridColumn='span 1'>Name:</Typography>
-              <Typography m='8px' gridColumn='span 1'>{user?.firstName + ' ' +user?.lastName}</Typography>
+              <Typography m='8px' gridColumn='span 1'>{user?.first_name + ' ' + user?.last_name}</Typography>
           
           
               <Typography m='8px' sx={{fontWeight: 'bold'}} gridColumn='span 1'>Email:</Typography>
@@ -106,13 +116,9 @@ const editProfile = () => {
           
               <Typography m='8px' sx={{fontWeight: 'bold'}} gridColumn='span 1'>Address:</Typography>
               <Box m='8px' gridColumn='span 1'>
-                  <Typography>{user?.streetAddress1}</Typography>
-                  <Typography>{user?.streetAddress2}</Typography>
+                  <Typography>{user?.address}</Typography>
                   <Typography>{user?.city}</Typography>
-                  <Typography>{user?.country}</Typography>
-                  <Typography>{user?.state}</Typography>
-                  <Typography>{user?.zipCode}</Typography> 
-                  <Typography>{user?.password}</Typography>            
+                  <Typography>{user?.zip}</Typography>           
               </Box>
             </Box>
 
@@ -166,10 +172,10 @@ const editProfile = () => {
                 label='First Name'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.profileUser.firstName}
-                name='profileUser.firstName'
-                error={formattedError('profileUser.firstName')}
-                helperText={formattedHelper('profileUser.firstName')}
+                value={values.profileUser.first_name}
+                name='profileUser.first_name'
+                error={formattedError('profileUser.first_name')}
+                helperText={formattedHelper('profileUser.first_name')}
                 sx={{gridColumn: 'span 1'}}
               />
 
@@ -179,10 +185,10 @@ const editProfile = () => {
                 label='Last Name'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.profileUser.lastName}
-                name='profileUser.lastName'
-                error={formattedError('profileUser.lastName')}
-                helperText={formattedHelper('profileUser.lastName')}
+                value={values.profileUser.last_name}
+                name='profileUser.last_name'
+                error={formattedError('profileUser.last_name')}
+                helperText={formattedHelper('profileUser.last_name')}
                 sx={{gridColumn: 'span 1'}}
               />
 
@@ -215,26 +221,13 @@ const editProfile = () => {
               <TextField
                 fullWidth
                 typeof='text'
-                label='Street Address 1'
+                label='Street Address'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.profileUser.streetAddress1}
-                name='profileUser.streetAddress1'
-                error={formattedError('profileUser.streetAddress1')}
-                helperText={formattedHelper('profileUser.streetAddress1')}
-                sx={{gridColumn: 'span 2'}}
-              />
-
-              <TextField
-                fullWidth
-                typeof='text'
-                label='Street Address 2 (optional)'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.profileUser.streetAddress2}
-                name='profileUser.streetAddress2'
-                error={formattedError('profileUser.streetAddress2')}
-                helperText={formattedHelper('profileUser.streetAddress2')}
+                value={values.profileUser.address}
+                name='profileUser.address'
+                error={formattedError('profileUser.address')}
+                helperText={formattedHelper('profileUser.address')}
                 sx={{gridColumn: 'span 2'}}
               />
 
@@ -254,39 +247,13 @@ const editProfile = () => {
               <TextField
                 fullWidth
                 typeof='text'
-                label='Country'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.profileUser.country}
-                name='profileUser.country'
-                error={formattedError('profileUser.country')}
-                helperText={formattedHelper('profileUser.country')}
-                sx={{gridColumn: 'span 1'}}
-              />
-
-              <TextField
-                fullWidth
-                typeof='text'
-                label='State'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.profileUser.state}
-                name='profileUser.state'
-                error={formattedError('profileUser.state')}
-                helperText={formattedHelper('profileUser.state')}
-                sx={{gridColumn: 'span 1'}}
-              />
-
-              <TextField
-                fullWidth
-                typeof='text'
                 label='Zip Code'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.profileUser.zipCode}
-                name='profileUser.zipCode'
-                error={formattedError('profileUser.zipCode')}
-                helperText={formattedHelper('profileUser.zipCode')}
+                value={values.profileUser.zip}
+                name='profileUser.zip'
+                error={formattedError('profileUser.zip')}
+                helperText={formattedHelper('profileUser.zip')}
                 sx={{gridColumn: 'span 1'}}
               />  
 

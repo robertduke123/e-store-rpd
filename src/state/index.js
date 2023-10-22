@@ -1,18 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-        users: [
-            {
-                firstName: 'r',
-                lastName: 'r',
-                email: 'r',
-                phone: 'r',
-                address: 'r',
-                city: 'r',
-                zipCode: 'r',
-                password: 'r'
+        user: {
+
             }
-        ],
+        ,
         isSignedIn: false,
         isCartOpen: false,
         cart: [],
@@ -38,8 +30,8 @@ export const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
-        onRegisterUser: (state, action) => {
-            state.users.push(action.payload)
+        setUser: (state, action) => {
+            state.user = action.payload.user
         },
         editUser: (state, action) => {
             state.users[0] = action.payload.user
@@ -103,7 +95,7 @@ export const cartSlice = createSlice({
 })
 
 export const {
-    onRegisterUser,
+    setUser,
     editUser,
     setIsSignedIn,
     setItems,

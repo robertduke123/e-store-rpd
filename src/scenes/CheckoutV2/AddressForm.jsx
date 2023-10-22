@@ -8,7 +8,7 @@ import { addShippingMulti, addShippingSingle } from '../../state'
 
 const AddressForm = ({checkoutToken, next}) => {
     const dispatch = useDispatch()
-    const user = useSelector((state) => state.cart.users[0])
+    const user = useSelector((state) => state.cart.user)
     const isSignedIn = useSelector((state) => state.cart.isSignedIn)
 
     const shippingCountries = useSelector((state) => state.cart.shippingMulti.countries)    
@@ -65,12 +65,12 @@ const AddressForm = ({checkoutToken, next}) => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit((data) => next({ ...data, shippingCountry, shippingSubdivision, shippingOption }))}>
             <Grid container spacing={3}>
-                <FormInput name='firstName' label='First Name' value={isSignedIn && user.firstName}/>
-                <FormInput name='lastName' label='Last Name' value={isSignedIn && user.lastName}/>
-                <FormInput name='address1' label='Address' value={isSignedIn && user.address}/>
-                <FormInput name='email' label='Email' value={isSignedIn && user.email}/>
-                <FormInput name='city' label='City' value={isSignedIn && user.city}/>
-                <FormInput name='zip' label='ZIP / Postal code' value={isSignedIn && user.zipCode}/>
+                <FormInput name='firstName' label='First Name' value={isSignedIn && user?.firstName}/>
+                <FormInput name='lastName' label='Last Name' value={isSignedIn && user?.lastName}/>
+                <FormInput name='address1' label='Address' value={isSignedIn && user?.address}/>
+                <FormInput name='email' label='Email' value={isSignedIn && user?.email}/>
+                <FormInput name='city' label='City' value={isSignedIn && user?.city}/>
+                <FormInput name='zip' label='ZIP / Postal code' value={isSignedIn && user?.zipCode}/>
                 <Grid item xs={12} sm={6}>
                     <InputLabel>Shipping Country</InputLabel>
                     <Select value={shippingCountry} fullWidth onChange={(e) => {
