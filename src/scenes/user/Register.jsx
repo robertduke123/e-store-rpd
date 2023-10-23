@@ -70,10 +70,13 @@ const handleSubmit = (values) => {
         })
         .then(response => response.json())
         .then(data => {
-          dispatch(setUser({user: data}))
-          console.log(data);
-          dispatch(setIsSignedIn({}))          
-          navigate('/')
+          if(data.id) {
+            dispatch(setUser({user: data}))
+            console.log(data);
+            dispatch(setIsSignedIn({}))          
+            navigate('/')
+          }
+          
         })
   }
 }

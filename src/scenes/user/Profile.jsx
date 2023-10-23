@@ -61,7 +61,6 @@ const editProfile = () => {
 
  const handleSubmit = (values) => {
   if(profileRoute === 'editDetails') {
-    //  dispatch(editUser({user: {...user, ...values.profileUser}})) 
       fetch('http://localhost:3000/edit_user', {
           method: 'PUT',
           headers: {"Content-Type": "application/json"},
@@ -78,16 +77,30 @@ const editProfile = () => {
         })
         .then(response => response.json())
         .then(data => {
-          dispatch(setUser({user: data}))
-          console.log(data);    
+          if(data.id) {
+            dispatch(setUser({user: data}))
+            console.log(data); 
+            setProfileRoute('details')
+          }
+             
         })
     } else {
-     if(values.profilePassword.oldPassword === user.password && values.profilePassword.newPassword === values.profilePassword.confirmPassword){
-      let password = values.profilePassword.confirmPassword
-     dispatch(editUser({user: {...user, password}}))
-    }
+      fetch('http://localhost:3000/edit_password', {
+          method: 'PUT',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            id: user.id,
+            oldPassword: values.profilePassword.oldPassword,
+            newPassword: values.profilePassword.confirmPassword
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data); 
+          setProfileRoute('details')   
+        })
   }
-    setProfileRoute('details')
+    
  }
 
 

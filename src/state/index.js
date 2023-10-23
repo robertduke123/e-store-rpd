@@ -33,9 +33,6 @@ export const cartSlice = createSlice({
         setUser: (state, action) => {
             state.user = action.payload.user
         },
-        editUser: (state, action) => {
-            state.users[0] = action.payload.user
-        },
         setIsSignedIn: (state) => {
             state.isSignedIn = !state.isSignedIn            
         },
@@ -96,7 +93,6 @@ export const cartSlice = createSlice({
 
 export const {
     setUser,
-    editUser,
     setIsSignedIn,
     setItems,
     addToCart,
