@@ -30,6 +30,7 @@ const App = () => {
 
   const fetchItems = async() => {
     const {data} = await commerce.products.list()
+    console.log(data);
     dispatch(setItems(data))
   }
 

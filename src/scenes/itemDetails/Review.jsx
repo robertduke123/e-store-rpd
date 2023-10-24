@@ -9,7 +9,8 @@ const Review = ({id}) => {
 
     const dispatch = useDispatch()
     const itemReviews = useSelector((state) => state.cart.itemReviews)
-    const [thisReviews, setThisReviews] = useState({})
+    const [data, setData] = useState({})
+    const [thisReviews, setThisReviews] = useState([])
     const [review, setReview]  =useState('')
     const [reviewStars, setReviewStars] = useState({
         one: false,
@@ -18,10 +19,21 @@ const Review = ({id}) => {
         four: false,
         five: false
     })
+    const getReviews = async() => {
+        await fetch('http://localhost:3000/get_reviews', {
+          method: 'PUT',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            product_id: id
+          })
+        })
+        .then(response => response.json())
+        .then(data => setData(data))
+    }
 
-    // useEffect(() => {
-    //   getItem()
-    // }, [itemId, items]) // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => {
+       getReviews()
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const confirmReview = (id, review, reviewStars) => {
         let stars= []
@@ -32,10 +44,21 @@ const Review = ({id}) => {
     // console.log(itemReviews, id);
     
     useEffect(() => {
-      itemReviews?.map((itemReview) => {
-        itemReview.id === id && setThisReviews(itemReview.reviews)
-    })  
-    }, [itemReviews])
+    //   itemReviews?.map((itemReview) => {
+    //     itemReview.id === id && setThisReviews(itemReview.reviews)
+    // }) 
+    if(data?.id) {
+            for(let i = 0; i< data?.review_text.length; i++) {
+                setThisReviews(prevState => ([
+                        ...prevState,
+                        {
+                            stars: [data.star_one[i],data.star_two[i],data.star_three[i],data.star_four[i],data.star_five[i]],
+                            review: data.review_text[i]
+                        }
+                    ]))
+            }
+       } 
+    }, [data])
     
 
     console.log(thisReviews);
