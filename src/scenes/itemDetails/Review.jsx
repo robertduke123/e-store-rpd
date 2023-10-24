@@ -32,7 +32,7 @@ const Review = ({id}) => {
     }
 
     useEffect(() => {
-       getReviews()
+        id && getReviews()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const confirmReview = (id, review, reviewStars) => {
@@ -47,17 +47,25 @@ const Review = ({id}) => {
     //   itemReviews?.map((itemReview) => {
     //     itemReview.id === id && setThisReviews(itemReview.reviews)
     // }) 
+    console.log(data);
     if(data?.id) {
+        let state = []
+        let thisState = {
+            stars: [],
+            review: ''
+        }
             for(let i = 0; i< data?.review_text.length; i++) {
-                setThisReviews(prevState => ([
-                        ...prevState,
-                        {
-                            stars: [data.star_one[i],data.star_two[i],data.star_three[i],data.star_four[i],data.star_five[i]],
-                            review: data.review_text[i]
-                        }
-                    ]))
+                console.log(i);
+                thisState = {
+                    stars: [data.star_one[i],data.star_two[i],data.star_three[i],data.star_four[i],data.star_five[i]],
+                    review: data.review_text[i]
+                }
+                state.push(thisState)
             }
+        setThisReviews(state)
+        state = []
        } 
+       console.log();
     }, [data])
     
 
@@ -105,10 +113,10 @@ const Review = ({id}) => {
         </div>    
         
             {thisReviews.length > 0 && thisReviews.map((review) => (
-                <Box>  
+                <Box key={`review &{thisReviews.indexOf(review)}`}>  
                     <div display='flex'>
                         {review.stars.map((value) => {
-                            if(value === true){ return <Star/>} else { return <StarBorder/>}
+                            if(value === true){ return <Star key={`star ${review.stars.indexOf(value)}`}/>} else { return <StarBorder key={`star ${review.stars.indexOf(value)}`}/>}
                         })}
                     </div>
                     <Typography>{review.review}</Typography> 
