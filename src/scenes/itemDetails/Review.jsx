@@ -2,14 +2,9 @@ import React, {useEffect, useState} from 'react'
 import { Box, Typography, TextField, Button, Divider } from '@mui/material'
 import { Star, StarBorder } from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux'
-import { addReview } from '../../state'
-import { current } from '@reduxjs/toolkit'
 
 const Review = ({id}) => {
 
-    const dispatch = useDispatch()
-    const itemReviews = useSelector((state) => state.cart.itemReviews)
-    const [data, setData] = useState({})
     const [thisReviews, setThisReviews] = useState([])
     const [review, setReview]  =useState('')
     const [reviewStars, setReviewStars] = useState({

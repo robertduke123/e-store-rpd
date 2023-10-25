@@ -78,15 +78,6 @@ export const cartSlice = createSlice({
         },
         addShippingSingle: (state, action) => {
             state.shippingSingle = {...state.shippingSingle, ...action.payload}
-        },
-        addReview: (state, action) => {
-            state.itemReviews.length > 0 ?
-            state.itemReviews.forEach((item) => {
-                item.id === action.payload.review.id ?
-                item.reviews.push(action.payload.review.reviews[0]) :
-                state.itemReviews.push(action.payload.review)
-            }) :
-            state.itemReviews.push(action.payload.review)
         }
      }
 })
@@ -103,8 +94,7 @@ export const {
     setIsCartOpen,
     addToken,
     addShippingMulti,
-    addShippingSingle,
-    addReview
+    addShippingSingle
 } = cartSlice.actions
 
 export default cartSlice.reducer

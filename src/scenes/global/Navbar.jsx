@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { TextField, Badge, Box, IconButton, Typography, Button } from '@mui/material'
-import { PersonOutline, ShoppingBagOutlined, MenuOutlined, SearchOutlined, HighlightOff } from '@mui/icons-material'
+import { PersonOutline, ShoppingBagOutlined, SearchOutlined, HighlightOff } from '@mui/icons-material'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { setIsCartOpen, setIsSignedIn } from '../../state'
 

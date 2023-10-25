@@ -14,7 +14,7 @@ const Item = ({item, width}) => {
     const [count, setCount] = useState(1)
     const [isHovered, setIsHovered] = useState(false)
 
-    const { id, category, price, name, image } = item
+    const { price, name, image } = item
     // const {
     //     data: {
     //         attributes: {

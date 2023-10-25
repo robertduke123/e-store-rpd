@@ -3,7 +3,7 @@ import { Box, Typography,TextField, Button } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import * as yup from 'yup'
 import { Formik, getIn} from 'formik'
-import { editUser, setUser } from '../../state'
+import { setUser } from '../../state'
 
 const initialValues = {
   profileUser: {

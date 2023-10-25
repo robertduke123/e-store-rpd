@@ -54,11 +54,11 @@ const CartMenu = () => {
     }
   }
 
-    const handleCart = async() => {    
-    await commerce.cart.empty()
-    await cart.forEach((item) => commerce.cart.add(item.id, item.count))
-    await generateToken()
-    }
+    // const handleCart = async() => {    
+    // await commerce.cart.empty()
+    // await cart.forEach((item) => commerce.cart.add(item.id, item.count))
+    // await generateToken()
+    // }
 
 
   return (

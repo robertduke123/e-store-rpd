@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Stepper, Step, StepLabel,Typography, CircularProgress, Divider, Button, Box } from '@mui/material'
 import AddressForm from '../AddressForm'
 import PaymentForm from '../PaymentForm'
@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom'
 const steps = ['Shipping address', 'Payment details']
 
 const Checkout = () => {
-    const cart = useSelector((state => state.cart.cart))
     const checkoutToken = useSelector((state) =>  state.cart.checkoutToken)
     const dispatch = useDispatch()
     const navigate = useNavigate()
