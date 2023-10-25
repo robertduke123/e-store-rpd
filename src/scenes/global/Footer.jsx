@@ -6,8 +6,11 @@ const Footer = () => {
 
   return (
     <Box
-        width='80%'
+        width='100%'
         margin='auto'
+        padding='20px 10% 0'
+        backgroundColor='rgba(80, 80, 80,.95)'
+        color='white'
         display='flex'
         justifyContent='space-between'
         flexWrap='wrap'

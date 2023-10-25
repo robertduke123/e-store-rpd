@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { TextField, Badge, Box, IconButton, Typography, Button } from '@mui/material'
-import { PersonOutline, ShoppingBagOutlined, MenuOutlined, SearchOutlined } from '@mui/icons-material'
+import { PersonOutline, ShoppingBagOutlined, MenuOutlined, SearchOutlined, HighlightOff } from '@mui/icons-material'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { setIsCartOpen, setIsSignedIn } from '../../state'
 
@@ -41,8 +41,8 @@ const Navbar = () => {
       alignItems='center'
       width='100%'
       height='60px'
-      backgroundColor='rgba(255,255,255,.95)'
-      color='black'
+      backgroundColor='rgba(80, 80, 80,.95)'
+      color='white'
       position='fixed'
       top='0'
       left='0'
@@ -58,7 +58,7 @@ const Navbar = () => {
         <Box
           onClick={() => navigate('/')}
           sx={{'&:hover': {cursor: 'pointer'}}}
-          color="#d6001c"
+          color="white"
         >
           Ecommerce
         </Box>
@@ -70,13 +70,18 @@ const Navbar = () => {
         >
           {search === 'show' ?
           <Box>
-            <TextField variant='standard' type='search' sx={{color: 'gray', width: '300px', paddingLeft: '5px'}} onChange={handleInputChange}/> 
+            <TextField variant='standard' type='search' sx={{backgroundColor: 'rgba(180,180,180)', borderRadius: '10px', width: '300px', paddingLeft: '5px'}} onChange={handleInputChange}/>
+            <IconButton sx={{color: 'white'}} onClick={() => {
+              setSearch('hide')
+              setSearchItem('')}}>
+              <HighlightOff/>
+            </IconButton>
             <Box
               width='300px'
               padding={searchItem !== '' && '5px'}
               sx={{
                 position: 'absolute',
-                backgroundColor: '#f0f0f0',
+                backgroundColor: 'rgba(80,80,80)',
                 borderRadius: '0 0 5px 5px'
               }}
             >
@@ -94,7 +99,7 @@ const Navbar = () => {
             </Box> 
           </Box>
            :
-          <IconButton sx={{color: 'black'}} onClick={() => {
+          <IconButton sx={{color: 'white'}} onClick={() => {
             setSearch('show') 
             setProfileBoxShow(false)
             }}>               
@@ -102,7 +107,7 @@ const Navbar = () => {
           </IconButton>
           }
           <IconButton 
-            sx={{color: 'black'}}
+            sx={{color: 'white'}}
             onClick={() => {
               isSignedIn ?
               setProfileBoxShow((prev) => !prev) :   
@@ -162,13 +167,13 @@ const Navbar = () => {
               setProfileBoxShow(false)
               setSearchItem('')
             }}
-            sx={{color: 'black'}}>
+            sx={{color: 'white'}}>
               <ShoppingBagOutlined/>
             </IconButton>  
           </Badge>          
-          <IconButton sx={{color: 'black'}}>
+          {/* <IconButton sx={{color: 'white'}}>
             <MenuOutlined/>
-          </IconButton>          
+          </IconButton>           */}
         </Box>
       </Box>      
     </Box>
