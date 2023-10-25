@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { Box, Typography, TextField, Button, Divider } from '@mui/material'
 import { Star, StarBorder } from '@mui/icons-material'
-import { useDispatch, useSelector } from 'react-redux'
 
 const Review = ({id}) => {
 
