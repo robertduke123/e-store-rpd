@@ -20,7 +20,10 @@ const Review = ({id}) => {
         five: false
     })
     const getReviews = async() => {
-        await fetch('http://localhost:3000/get_reviews', {
+        await fetch(
+            // 'http://localhost:3000/get_reviews'
+            'https://e-store-api-0tkm.onrender.com/get_reviews'
+            , {
           method: 'GET',
           headers: {"Content-Type": "application/json"}
         })
@@ -59,7 +62,10 @@ const Review = ({id}) => {
         let stars= []
         Object.entries(reviewStars).forEach(entry => stars.push(entry[1]))
         // dispatch(addReview({review: {id: id, reviews: [{stars, review}]}}))
-        fetch('http://localhost:3000/reviews', {
+        fetch(
+            // 'http://localhost:3000/reviews'
+            'https://e-store-api-0tkm.onrender.com/reviews'
+            , {
           method: 'PUT',
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({

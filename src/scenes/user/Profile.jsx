@@ -61,7 +61,10 @@ const editProfile = () => {
 
  const handleSubmit = (values) => {
   if(profileRoute === 'editDetails') {
-      fetch('http://localhost:3000/edit_user', {
+      fetch(
+        // 'http://localhost:3000/edit_user'
+        'https://e-store-api-0tkm.onrender.com/edit_user'
+        , {
           method: 'PUT',
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({
@@ -85,7 +88,10 @@ const editProfile = () => {
              
         })
     } else {
-      fetch('http://localhost:3000/edit_password', {
+      fetch(
+        // 'http://localhost:3000/edit_password'
+        'https://e-store-api-0tkm.onrender.com/edit_password'
+        , {
           method: 'PUT',
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({
