@@ -65,12 +65,12 @@ const AddressForm = ({checkoutToken, next}) => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit((data) => next({ ...data, shippingCountry, shippingSubdivision, shippingOption }))}>
             <Grid container spacing={3}>
-                <FormInput name='firstName' label='First Name' value={isSignedIn && user?.firstName}/>
-                <FormInput name='lastName' label='Last Name' value={isSignedIn && user?.lastName}/>
+                <FormInput name='firstName' label='First Name' value={isSignedIn && user?.first_name}/>
+                <FormInput name='lastName' label='Last Name' value={isSignedIn && user?.last_name}/>
                 <FormInput name='address1' label='Address' value={isSignedIn && user?.address}/>
                 <FormInput name='email' label='Email' value={isSignedIn && user?.email}/>
                 <FormInput name='city' label='City' value={isSignedIn && user?.city}/>
-                <FormInput name='zip' label='ZIP / Postal code' value={isSignedIn && user?.zipCode}/>
+                <FormInput name='zip' label='ZIP / Postal code' value={isSignedIn && user?.zip}/>
                 <Grid item xs={12} sm={6}>
                     <InputLabel>Shipping Country</InputLabel>
                     <Select value={shippingCountry} fullWidth onChange={(e) => {
