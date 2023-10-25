@@ -21,14 +21,34 @@ const Review = ({id}) => {
     })
     const getReviews = async() => {
         await fetch('http://localhost:3000/get_reviews', {
-          method: 'PUT',
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({
-            product_id: id
-          })
+          method: 'GET',
+          headers: {"Content-Type": "application/json"}
         })
         .then(response => response.json())
-        .then(data => setData(data))
+        .then(data => {
+            console.log(data);
+            data.forEach(row => {
+                console.log(row);
+               if(row.product_id === id) {
+                let state = []
+                let thisState = {
+                    stars: [],
+                    review: ''
+                }
+                    for(let i = 0; i< row?.review_text.length; i++) {
+                        console.log(i);
+                        thisState = {
+                            stars: [row.star_one[i],row.star_two[i],row.star_three[i],row.star_four[i],row.star_five[i]],
+                            review: row.review_text[i]
+                        }
+                        state.push(thisState)
+                    }
+                setThisReviews(state)
+                state = []   
+               } 
+            })
+                   
+        })
     }
 
     useEffect(() => {
@@ -38,17 +58,18 @@ const Review = ({id}) => {
     const confirmReview = (id, review, reviewStars) => {
         let stars= []
         Object.entries(reviewStars).forEach(entry => stars.push(entry[1]))
-        dispatch(addReview({review: {id: id, reviews: [{stars, review}]}}))
-    }
-
-    // console.log(itemReviews, id);
-    
-    useEffect(() => {
-    //   itemReviews?.map((itemReview) => {
-    //     itemReview.id === id && setThisReviews(itemReview.reviews)
-    // }) 
-    console.log(data);
-    if(data?.id) {
+        // dispatch(addReview({review: {id: id, reviews: [{stars, review}]}}))
+        fetch('http://localhost:3000/reviews', {
+          method: 'PUT',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            product_id: id,
+            stars: stars,
+            review: review
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
         let state = []
         let thisState = {
             stars: [],
@@ -64,12 +85,8 @@ const Review = ({id}) => {
             }
         setThisReviews(state)
         state = []
-       } 
-       console.log();
-    }, [data])
-    
-
-    console.log(thisReviews);
+        })
+    }
      
     const starReview = (number) => {
         number === 'one' && setReviewStars({one: true, two: false, three: false, four: false, five: false})
@@ -113,14 +130,14 @@ const Review = ({id}) => {
         </div>    
         
             {thisReviews.length > 0 && thisReviews.map((review) => (
-                <Box key={`review &{thisReviews.indexOf(review)}`}>  
+                <Box key={`review ${thisReviews.indexOf(review)}`} paddingTop='15px'>  
                     <div display='flex'>
                         {review.stars.map((value) => {
                             if(value === true){ return <Star key={`star ${review.stars.indexOf(value)}`}/>} else { return <StarBorder key={`star ${review.stars.indexOf(value)}`}/>}
                         })}
                     </div>
                     <Typography>{review.review}</Typography> 
-                    <Divider/>
+                    <Divider sx={{paddingTop: '15px'}}/>
                 </Box> 
                 ))
                 }
