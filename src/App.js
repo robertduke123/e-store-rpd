@@ -36,7 +36,7 @@ const App = () => {
 
   useEffect(() => {
     fetchItems()
-  }, [])
+  })
 
   return (
     <div className='app'>
