@@ -8,6 +8,8 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_pUBLIC_KEY )
 
 const PaymentForm = ({checkoutToken, shippingData, prevStep, onCaptureCheckout, nextStep, timeout}) => {
 
+    console.log(shippingData);
+
     const handleSubmit = async(e, elements, stripe) => {
      e.preventDefault()
 
