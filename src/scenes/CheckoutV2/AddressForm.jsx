@@ -21,9 +21,7 @@ const AddressForm = ({checkoutToken, next}) => {
 
     const countries = Object.entries(shippingCountries).map(([code, name]) => ({ id: code, label: name})) 
     const subdivisions = Object.entries(shippingSubdevisions).map(([code, name]) => ({ id: code, label: name})) 
-    const options = shippingOptions.map((sO) => ({ id: sO.id, label: `${sO.description} - (${sO.price.formatted_with_symbol})`}))
-
-   
+    const options = shippingOptions.map((sO) => ({ id: sO.id, label: `${sO.description} - (${sO.price.formatted_with_symbol})`}))   
 
     const fetchShippingSubdivisions = async (checkoutTokenId ,countryCode) => {
         const {subdivisions} = await commerce.services.localeListSubdivisions(countryCode)        
@@ -34,36 +32,25 @@ const AddressForm = ({checkoutToken, next}) => {
     const options = await commerce.checkout.getShippingOptions(checkoutTokenId, { country: countryCode, region: subdivision })        
             dispatch(addShippingMulti({options: options}))
             dispatch(addShippingSingle({option: options[0].id}))
-        // setShippingSubdevisions(subdivisions)
-        // setShippingSubdivision((Object.keys(subdivisions)[0]))
     }
 
     const fetchShippingOptions = async (checkoutTokenId, country, region = null) => {
         const options = await commerce.checkout.getShippingOptions(checkoutTokenId, { country, region })
-        // console.log(options);        
         dispatch(addShippingMulti({options: options}))
         dispatch(addShippingSingle({option: options[0].id}))
-        // setShippingOptions(options)
-        // setShippingOption(options[0].id)
     }
-
-    // useEffect(() => {
-    //     fetchShippinCountries(checkoutToken?.id)
-    // }, [checkoutToken])
-
-    // useEffect(() => {
-    //     shippingCountry && fetchShippingSubdivisions(shippingCountry)
-    // }, [shippingCountry])
-
-    // useEffect(() => {
-    //     shippingSubdivision && fetchShippingOptions(checkoutToken?.id, shippingCountry, shippingSubdivision)
-    // }, [shippingSubdivision])
 
   return (
     <>
       <Typography variant='h6' gutterBottom>Shipping Address</Typography>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit((data) => next({ ...data, shippingCountry, shippingSubdivision, shippingOption }))}>
+        <form onSubmit={methods.handleSubmit((data) =>{
+            if(isSignedIn){
+                next({ address1: user.address, city:user.city, email: user.email, firstName: user.first_name, lastName: user.last_name, shippingCountry, shippingSubdivision, shippingOption })
+            } else {
+                next({ ...data, shippingCountry, shippingSubdivision, shippingOption })
+            }
+             })}>
             <Grid container spacing={3}>
                 <FormInput name='firstName' label='First Name' value={isSignedIn ? user?.first_name : ''}/>
                 <FormInput name='lastName' label='Last Name' value={isSignedIn ? user?.last_name : ''}/>
