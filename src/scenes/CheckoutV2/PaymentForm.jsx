@@ -6,7 +6,7 @@ import Review from './Review'
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_pUBLIC_KEY )
 
-const PaymentForm = ({checkoutToken, shippingData, prevStep, onCaptureCheckout, nextStep, timeout}) => {
+const PaymentForm = ({checkoutToken, shippingData, prevStep, onCaptureCheckout, nextStep }) => {
 
     console.log(shippingData);
 
@@ -45,7 +45,6 @@ const PaymentForm = ({checkoutToken, shippingData, prevStep, onCaptureCheckout, 
         }
         onCaptureCheckout(checkoutToken.id, orderData)
         nextStep()
-        timeout()
      }
     }
 
@@ -61,8 +60,34 @@ const PaymentForm = ({checkoutToken, shippingData, prevStep, onCaptureCheckout, 
                         <CardElement/>
                         <br/><br/>
                         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                            <Button variant='outlined' onClick={prevStep}>Back</Button>
-                            <Button type='Submit' variant='contained' disabled={!stripe} color='primary'>
+                            <Button 
+                            fullWidth 
+                            variant='contained' 
+                            color='primary'
+                            sx={{
+                                backgroundColor: "#999999",
+                                boxShadow: 'none',
+                                color: 'white',
+                                borderRadius: 0,
+                                padding: '15px 40px',
+                                marginRight: '5px'
+                                }}
+                            onClick={prevStep}
+                            >Back</Button>
+                            <Button 
+                            type='Submit' 
+                            fullWidth 
+                            variant='contained' 
+                            color='primary'
+                            sx={{
+                                backgroundColor: "#999999",
+                                boxShadow: 'none',
+                                color: 'white',
+                                borderRadius: 0,
+                                padding: '15px 40px',
+                                marginLeft: '5px'
+                                }}
+                            >
                                 Pay {checkoutToken?.subtotal.formatted_with_symbol}
                             </Button>
                         </div>

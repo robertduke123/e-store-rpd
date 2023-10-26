@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Stepper, Step, StepLabel,Typography, CircularProgress, Divider, Button, Box } from '@mui/material'
 import AddressForm from '../AddressForm'
 import PaymentForm from '../PaymentForm'
@@ -17,8 +17,6 @@ const Checkout = () => {
     const [ shippingData, setShippingData ] = useState({})
     const [order, setOrder] = useState({})
     const [errorMessage, setErrorMessage] = useState('')
-    const [isFinished, setIsFinished] = useState(false)
-
     // console.log(checkoutToken);
 
     // useEffect(() => {
@@ -46,11 +44,7 @@ const Checkout = () => {
         nextStep()
     }
 
-    const timeout = () => {
-        setTimeout(() => {
-            setIsFinished(true)
-        }, 5000);
-    } 
+    
 
   return (
         
@@ -63,8 +57,7 @@ const Checkout = () => {
                     </Step>
                 )))}
             </Stepper>
-            {activeStep === steps.length ?              
-                isFinished ? 
+            {activeStep === steps.length ?         
                 order.customer ?  
                 <>
                     <div style={{padding: '15px'}}>
@@ -87,27 +80,27 @@ const Checkout = () => {
                         }}
                     >Back to Home</Button>
                 </> :
-                <>
-                    <div style={{padding: '15px'}}>
-                        <Typography variant='h5' >Thank you for your purchase</Typography>
-                        <Divider/>
-                    </div>
-                    <br/>
-                    <Button 
-                    onClick={() => navigate('/')} 
-                    type='button'
-                    variant='contained' 
-                    color='primary'
-                    sx={{
-                        backgroundColor: "#999999",
-                        boxShadow: 'none',
-                        color: 'white',
-                        borderRadius: 0,
-                        padding: '15px 40px'
-                        }}
-                    >Back to Home</Button>
-                </> :
-                <div>
+                // <>
+                //     <div style={{padding: '15px'}}>
+                //         <Typography variant='h5' >Thank you for your purchase</Typography>
+                //         <Divider/>
+                //     </div>
+                //     <br/>
+                //     <Button 
+                //     onClick={() => navigate('/')} 
+                //     type='button'
+                //     variant='contained' 
+                //     color='primary'
+                //     sx={{
+                //         backgroundColor: "#999999",
+                //         boxShadow: 'none',
+                //         color: 'white',
+                //         borderRadius: 0,
+                //         padding: '15px 40px'
+                //         }}
+                //     >Back to Home</Button>
+                // </> :
+                <div style={{width: '100%', padding: '10px 0', display: 'flex', justifyContent: 'center'}}>
                     <CircularProgress/>
                 </div> :
                 activeStep === 0 ?
@@ -120,7 +113,6 @@ const Checkout = () => {
                 prevStep={prevStep}
                 onCaptureCheckout={handleCaptureCheckout}
                 nextStep={nextStep}
-                timeout={timeout}
                 />
             }
       </Box>
