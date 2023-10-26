@@ -49,7 +49,7 @@ const Checkout = () => {
     const timeout = () => {
         setTimeout(() => {
             setIsFinished(true)
-        }, 3000);
+        }, 5000);
     } 
 
   return (
@@ -63,27 +63,9 @@ const Checkout = () => {
                     </Step>
                 )))}
             </Stepper>
-            {activeStep === steps.length ?
-            order.customer ?
-            errorMessage ? 
-                <>
-                    <Typography variant='h5'>Error: {errorMessage}</Typography>
-                    <br/>
-                    <Button 
-                    onClick={() => navigate('/')} 
-                    type='button'                    
-                    variant='contained' 
-                    color='primary'
-                    sx={{
-                        backgroundColor: "#999999",
-                        boxShadow: 'none',
-                        color: 'white',
-                        borderRadius: 0,
-                        padding: '15px 40px'
-                        }}
-                    >Back to Home</Button>
-                </> :                
+            {activeStep === steps.length ?              
                 isFinished ? 
+                order.customer ?  
                 <>
                     <div style={{padding: '15px'}}>
                         <Typography variant='h5'>Thank you for your purchase, {order.customer.firstname} {order.customer.lastname}</Typography>
@@ -105,10 +87,7 @@ const Checkout = () => {
                         }}
                     >Back to Home</Button>
                 </> :
-                <div>
-                    <CircularProgress/>
-                </div> :
-                 <>
+                <>
                     <div style={{padding: '15px'}}>
                         <Typography variant='h5' >Thank you for your purchase</Typography>
                         <Divider/>
@@ -128,6 +107,9 @@ const Checkout = () => {
                         }}
                     >Back to Home</Button>
                 </> :
+                <div>
+                    <CircularProgress/>
+                </div> :
                 activeStep === 0 ?
                 <AddressForm
                  checkoutToken={checkoutToken !== null && checkoutToken} 
