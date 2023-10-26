@@ -44,7 +44,6 @@ const handleSubmit = (values) => {
         .then(response => response.json())
         .then(data => {
           if(data.id) {
-            console.log(data);
             dispatch(setUser({user: data}))
             dispatch(setIsSignedIn({}))          
             navigate('/')
@@ -53,7 +52,6 @@ const handleSubmit = (values) => {
         })
 
     }
-    console.log('test!!!!');
 }
 
   return (
@@ -70,8 +68,7 @@ const handleSubmit = (values) => {
           handleBlur,
           handleChange,
           handleSubmit
-        }) =>{ 
-          // console.log(signInSchema);
+        }) => { 
 
           const formattedError = (field) =>  Boolean(getIn(touched, field)) &&  getIn(errors, field)
 

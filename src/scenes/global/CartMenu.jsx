@@ -4,10 +4,9 @@ import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import styled from '@emotion/styled'
-import { decreaseCount, increaseCount, removeFromCart, addToken, addShippingMulti, addShippingSingle ,setIsCartOpen } from '../../state'
+import { decreaseCount, increaseCount, removeFromCart, setIsCartOpen } from '../../state'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {commerce} from '../../lib/commerce'
 
 const FlexBox = styled(Box)`
     display: flex;
@@ -15,51 +14,17 @@ const FlexBox = styled(Box)`
     align-items: center;
 `;
 
-const CartMenu = () => {
+const CartMenu = ({generateToken}) => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const checkoutToken = useSelector((state) => state.cart.checkoutToken)
     const cart = useSelector((state) => state.cart.cart)
     const isCartOpen = useSelector((state) => state.cart.isCartOpen)
 
     const totalPrice = cart.reduce((total, item) => {
         return total + item.count * item.price.formatted
     }, 0)
-
-    const generateToken = async () => {
-    await commerce.cart.empty()
-    await cart.forEach((item) => commerce.cart.add(item.id, item.count))    
-    const comCart = await commerce.cart.retrieve()
-    try {
-    const token = await commerce.checkout.generateToken(comCart.id, { type: 'cart' })
-    dispatch(addToken({checkoutToken: token})) 
-    console.log(token);
-
-   const {countries} = await commerce.services.localeListShippingCountries(token.id)        
-            dispatch(addShippingMulti({countries: countries}))
-            dispatch(addShippingSingle({country: Object.keys(countries)[0]})) 
-            let countryCode = Object.keys(countries)[0]
-
-    const {subdivisions} = await commerce.services.localeListSubdivisions(countryCode)        
-            dispatch(addShippingMulti({subs: subdivisions}))
-            dispatch(addShippingSingle({sub: Object.keys(subdivisions)[0]}))
-            let subdivision = Object.keys(subdivisions)[0]
-
-    const options = await commerce.checkout.getShippingOptions(token.id, { country: countryCode, region: subdivision })        
-            dispatch(addShippingMulti({options: options}))
-            dispatch(addShippingSingle({option: options[0].id}))
-
-    } catch(error) {
-          console.log(error);
-    }
-  }
-
-    // const handleCart = async() => {    
-    // await commerce.cart.empty()
-    // await cart.forEach((item) => commerce.cart.add(item.id, item.count))
-    // await generateToken()
-    // }
-
 
   return (
     <Box //overlay 

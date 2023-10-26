@@ -17,17 +17,10 @@ const Checkout = () => {
     const [ shippingData, setShippingData ] = useState({})
     const [order, setOrder] = useState({})
     const [errorMessage, setErrorMessage] = useState('')
-    // console.log(checkoutToken);
-
-    // useEffect(() => {
-    //     generateToken()
-    //     console.log(checkoutToken);
-    // }, [])
 
     const handleCaptureCheckout = async(checkoutTokenId, newOrder) => {
     try{
       const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder)
-        console.log(incomingOrder);
       setOrder(incomingOrder)
       commerce.cart.refresh()
         dispatch(emptyCart({}))

@@ -62,7 +62,6 @@ const AddressForm = ({checkoutToken, next}) => {
                     <InputLabel>Shipping Country</InputLabel>
                     <Select value={shippingCountry} fullWidth onChange={(e) => {
                         dispatch(addShippingSingle({country: e.target.value}))
-                        console.log(e.target.value);
                         fetchShippingSubdivisions(checkoutToken?.id, e.target.value)
                         }}>
                         {countries && countries.map((country) => (

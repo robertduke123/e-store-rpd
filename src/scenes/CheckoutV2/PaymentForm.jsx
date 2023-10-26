@@ -8,8 +8,6 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_pUBLIC_KEY )
 
 const PaymentForm = ({checkoutToken, shippingData, prevStep, onCaptureCheckout, nextStep }) => {
 
-    console.log(shippingData);
-
     const handleSubmit = async(e, elements, stripe) => {
      e.preventDefault()
 
@@ -18,12 +16,10 @@ const PaymentForm = ({checkoutToken, shippingData, prevStep, onCaptureCheckout, 
      const cardElement = elements.getElement(CardElement)
 
      const {error, paymentMethod} = await stripe.createPaymentMethod({type: 'card', card: cardElement})
-     console.log(paymentMethod);
  
      if(error) {
         console.log(error);
      } else {
-        console.log(shippingData);
         const orderData = {
             line_items: checkoutToken.line_items,
             customer: {firstname: shippingData.firstName, lastname: shippingData.lastName, email: shippingData.email},

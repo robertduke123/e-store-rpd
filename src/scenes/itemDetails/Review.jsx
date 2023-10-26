@@ -23,9 +23,7 @@ const Review = ({id}) => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             data.forEach(row => {
-                console.log(row);
                if(row.product_id === id) {
                 let state = []
                 let thisState = {
@@ -33,7 +31,6 @@ const Review = ({id}) => {
                     review: ''
                 }
                     for(let i = 0; i< row?.review_text.length; i++) {
-                        console.log(i);
                         thisState = {
                             stars: [row.star_one[i],row.star_two[i],row.star_three[i],row.star_four[i],row.star_five[i]],
                             review: row.review_text[i]
@@ -55,7 +52,6 @@ const Review = ({id}) => {
     const confirmReview = (id, review, reviewStars) => {
         let stars= []
         Object.entries(reviewStars).forEach(entry => stars.push(entry[1]))
-        // dispatch(addReview({review: {id: id, reviews: [{stars, review}]}}))
         fetch(
             // 'http://localhost:3000/reviews'
             'https://e-store-api-0tkm.onrender.com/reviews'
@@ -76,7 +72,6 @@ const Review = ({id}) => {
             review: ''
         }
             for(let i = 0; i< data?.review_text.length; i++) {
-                console.log(i);
                 thisState = {
                     stars: [data.star_one[i],data.star_two[i],data.star_three[i],data.star_four[i],data.star_five[i]],
                     review: data.review_text[i]

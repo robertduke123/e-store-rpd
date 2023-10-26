@@ -10,8 +10,6 @@ const Navbar = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const location = useLocation()
-
-    console.log(location);
   
     const isSignedIn = useSelector((state) => state.cart.isSignedIn)
     const items = useSelector((state) => state.cart.items)

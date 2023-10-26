@@ -82,7 +82,6 @@ const editProfile = () => {
         .then(data => {
           if(data.id) {
             dispatch(setUser({user: data}))
-            console.log(data); 
             setProfileRoute('details')
           }
              
@@ -102,7 +101,6 @@ const editProfile = () => {
         })
         .then(response => response.json())
         .then(data => {
-          console.log(data); 
           setProfileRoute('details')   
         })
   }
@@ -171,7 +169,6 @@ const editProfile = () => {
           handleChange,
           handleSubmit,
         }) =>{ 
-          console.log(values);
 
           const formattedError = (field) =>  Boolean(getIn(touched, field)) &&  getIn(errors, field)
 
@@ -329,7 +326,6 @@ const editProfile = () => {
           handleChange,
           handleSubmit,
         }) =>{ 
-          console.log(values);
 
           const formattedError = (field) =>  Boolean(getIn(touched, field)) &&  getIn(errors, field)
 
