@@ -44,7 +44,7 @@ const handleSubmit = (values) => {
         .then(response => response.json())
         .then(data => {
           if(data.id) {
-            dispatch(setUser({user: data}))
+            dispatch(setUser({user: data})) 
             dispatch(setIsSignedIn({}))          
             navigate('/')
           }

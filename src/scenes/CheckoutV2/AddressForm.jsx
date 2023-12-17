@@ -8,7 +8,7 @@ import { addShippingMulti, addShippingSingle } from '../../state'
 
 const AddressForm = ({checkoutToken, next}) => {
     const dispatch = useDispatch()
-    const user = useSelector((state) => state.cart.user)
+    const user = useSelector((state) => state.cart.user) 
     const isSignedIn = useSelector((state) => state.cart.isSignedIn)
 
     const shippingCountries = useSelector((state) => state.cart.shippingMulti.countries)    

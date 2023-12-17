@@ -31,7 +31,7 @@ export const cartSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
-            state.user = action.payload.user
+            state.user = action.payload.user 
         },
         setIsSignedIn: (state) => {
             state.isSignedIn = !state.isSignedIn            
